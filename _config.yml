@@ -1,0 +1,43 @@
+title: Rishi Giri
+author: Rishi Giri
+subtitle: "0.1x Programmer"
+
+url: "https://ir8x.github.io"
+baseurl: ""
+
+footer_only_homepage: True
+footer_url: ""
+footer_text: "∞"
+
+profile-picture: assets/cat.png
+favicon_location: assets/favicon.ico
+
+permalink: /:year-:month-:day-:title/
+sass:
+    style: compressed
+    sass_dir: css
+
+include:
+  - assets/data
+
+navbar:
+ - name: "Home"
+   link: ""
+ - name: "Blog"
+   link: "blog"
+ - name: "Projects"
+   link: "projects"
+ - name: "Artograph"
+   link: "art"
+ - name: "😎 Cool 🚀"
+   link: "updates"
+
+social_sites:
+  github: CodeDotJS
+  twitter: Rishi_Giri_
+  instagram: iama_rishi
+  art: iama_rishi.art
+  spotify: spotifyart
+
+plugins:
+  - jemoji
