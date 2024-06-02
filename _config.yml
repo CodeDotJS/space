@@ -19,6 +19,7 @@ sass:
 
 include:
   - assets/data
+  - assets/fonts
 
 navbar:
  - name: "Home"
