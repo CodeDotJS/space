@@ -1,0 +1,14 @@
+<div class="socials">
+    <div class="social-links">
+        <ul>
+            {% for social in site.data.socials %}
+                {% assign social_data = social[1] %}
+                <li>
+                    <a href="{{ social_data.href }}{{ social_data.id }}" title="{{ social_data.title }}" target="_blank">
+                        <i class="fa {{ social_data.fa-icon }}"></i> {{ social_data.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
