@@ -1,0 +1,70 @@
+.projects {
+    .project-card {
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+
+    @media (max-width: $med-width) {
+        flex-direction: column;
+    }
+
+    img {
+        max-width: 150px;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .project-details {
+        padding: 1rem;
+
+        h2 {
+            margin-top: 0;
+            // margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            font-family: "Open Sans";
+        }
+
+        p {
+            margin: 0;
+        }
+
+        @media (max-width: $med-width) {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .project-links {
+        display: flex;
+        margin-top: 10px;
+
+        a {
+            color: #333;
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #fff;
+            border-radius: 38px;
+            transition: background-color 0.3s;
+            background: #f7c7f0;
+            padding: 5px 10px;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #f0f0f0;
+            }
+
+            &:not(:last-child) {
+                margin-right: 1rem;
+            }
+        }
+
+        @media (max-width: $small-width) {
+            align-items: center;
+            font-size: 10px;
+        }
+    }
+}
+}
+
