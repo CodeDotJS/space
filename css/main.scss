@@ -9,6 +9,14 @@
 @import "csv";
 @import "socials";
 
+@font-face {
+    font-family: 'Cascadia Code';
+    src: url('/assets/fonts/CascadiaCode.woff2') format('woff2'),
+         url('/assets/fonts/CascadiaCode.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     margin: 0;
     background-color: #FFFFDD;
