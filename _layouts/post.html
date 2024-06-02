@@ -1,0 +1,29 @@
+---
+layout: default
+---
+
+<div class="page-subtitle">
+    {% for tag in page.tags %}
+        {% if page.tags.first == tag %}
+            <b>[</b>
+        {% endif %}
+        <a href="{{ site.baseurl }}/tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>
+        {% if page.tags.last == tag %}
+            <b>]</b>
+        {% else %}
+            ,
+        {% endif %}
+    {% endfor %}
+</div>
+
+{{ content }}
+
+<div class="post-navigation">
+    {% if page.next %}
+        <a class="prev-post" href="{{ site.baseurl }}{{ page.next.url }}"> {{ page.next.title }}</a>
+    {% endif %}
+
+    {% if page.previous %}
+        <a class="next-post" href="{{ site.baseurl }}{{ page.previous.url }}"> {{ page.previous.title }}</a>
+    {% endif %}
+</div>
