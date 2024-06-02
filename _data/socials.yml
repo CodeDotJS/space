@@ -1,0 +1,31 @@
+github:
+  id: 'CodeDotJS'
+  href: 'https://github.com/'
+  title: ''
+  fa-icon: 'fa-github'
+
+twitter:
+  id: 'Rishi_Giri_'
+  href: 'https://www.twitter.com/'
+  title: ''
+  fa-icon: 'fa-twitter'
+
+instagram:
+  id: 'iama_rishi'
+  href: 'https://www.instagram.com/'
+  title: ''
+  fa-icon: 'fa-instagram'
+
+instagram_art:
+  id: 'iama_rishi.art'
+  href: 'https://www.instagram.com/'
+  title: ''
+  fa-icon: 'fa-paintbrush'
+
+email:
+  id: 'rushforlinux@gmail.com'
+  href: 'mailto:'
+  title: ''
+  fa-icon: 'fa-envelope'
+
+
