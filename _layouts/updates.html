@@ -2,10 +2,8 @@
 layout: default
 ---
 {{content}}
-
-
 {% include commit.html %}
-
+{% include spotify.html %}
 <div class="update-page">
     <div class="grid-row">
         <div class="card card-blue">
@@ -13,18 +11,21 @@ layout: default
             <p id="github-info">Loading...</p>
         </div>
         <div class="card card-green">
-            <h3>Last Song Played</h3>
-            <div class="song-header">
-                <span class="song-name">Watermelon Sugar</span>
-                <span class="played-at">2024-05-18 10:00 AM</span>
-            </div>
-            <div class="song-info">
-                <span class="artist-name">Harry Styles</span>
-                <span class="album-name">Fine Line</span>
+            <h3>Recently Played</h3>
+            <div class="spotify-recently-played">
+                <div class="song-info">
+                    <div class="music-cover">
+                        <img class="song-cover" src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt="">
+                    </div>
+                    <div class="music-info">
+                        <span class="song-name">Loading...</span>
+                        <span class="artist-name"></span>
+                        <span class="played-at"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
     <div class="grid-row">
         <div class="card card-pink">
             <h3>Book I'm Reading</h3>
