@@ -1,0 +1,46 @@
+<script>
+async function fetchLastPlayedSong() {
+  const accessToken = '';
+
+  const currentTimestamp = Date.now();
+
+  try {
+    const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=1&before=${currentTimestamp}`, {
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    });
+    const data = await response.json();
+
+    if (data.items && data.items.length > 0) {
+      const lastPlayed = data.items[0];
+      const songName = lastPlayed.track.name;
+      const cover = lastPlayed.track.album.images[1].url;
+      const artistName = lastPlayed.track.artists.map(artist => artist.name).join(', ');
+      const playedAt = new Date(lastPlayed.played_at);
+      const currentTime = new Date();
+      const timeDifference = Math.abs(currentTime - playedAt);
+      const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+      const hoursDifference = Math.floor(minutesDifference / 60);
+      const formattedTime = hoursDifference > 0 ? `${hoursDifference} hours ago` : `${minutesDifference} minutes ago`;
+
+      document.querySelector('.song-name').textContent = songName;
+      document.querySelector('.song-cover').src = cover;
+      document.querySelector('.artist-name').textContent = `by ${artistName}`;
+      document.querySelector('.played-at').textContent = `Played: ${formattedTime}`;
+    } else {
+      document.querySelector('.song-name').textContent = 'No recent songs found.';
+      document.querySelector('.song-cover').src = 'https://codedotjs.github.io/space/assets/cat.png';
+      document.querySelector('.artist-name').textContent = '';
+      document.querySelector('.played-at').textContent = '';
+    }
+  } catch (error) {
+    console.error('Error fetching last played song:', error);
+    document.querySelector('.song-name').textContent = 'Error loading song information.';
+    document.querySelector('.artist-name').textContent = '';
+    document.querySelector('.played-at').textContent = '';
+  }
+}
+
+fetchLastPlayedSong();
+</script>
