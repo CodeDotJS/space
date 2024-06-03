@@ -1,0 +1,33 @@
+.spotify-recently-played {
+
+  .song-info {
+    display: flex;
+    align-items: center;
+
+    .music-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .song-cover {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+    }
+
+    .song-name {
+      font-size: 1.2em;
+      margin: 5px 0;
+    }
+
+    .artist-name {
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+
+    .played-at {
+      font-size: 0.9em;
+    }
+  }
+}
