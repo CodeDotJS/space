@@ -29,7 +29,7 @@ I admire Aaron Swartz. He’s been a great inspiration to me for a long time.
 
 <p align="center">...</p>
 
-<p align="center"><img width="10%" src="{{site.baseurl}}/assets/aaronsw.png"></p>
+<p align="center"><img class="aaron" src="{{site.baseurl}}/assets/aaronsw.png"></p>
 
 <p align="center"><b>“Be curious. Read widely. Try new things. What people call intelligence just boils down to curiosity.”</b></p>
 
