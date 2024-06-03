@@ -21,15 +21,16 @@ async function fetchLastPlayedSong() {
       document.querySelector('.played-at').textContent = `${formattedTime}`;
     } else {
       document.querySelector('.song-name').textContent = 'No recent songs found.';
-      document.querySelector('.song-cover').src = 'https://codedotjs.github.io/space/assets/cat.png';
-      document.querySelector('.artist-name').textContent = '';
-      document.querySelector('.played-at').textContent = '';
+      document.querySelector('.song-cover').src = '../assets/cat.png';
+      document.querySelector('.artist-name').style.display = 'none';
+      document.querySelector('.played-at').style.display = 'none';
     }
   } catch (error) {
     console.error('Error fetching last played song:', error);
+    document.querySelector('.song-cover').src = '../assets/cat.png';
     document.querySelector('.song-name').textContent = 'Error loading song information.';
-    document.querySelector('.artist-name').textContent = '';
-    document.querySelector('.played-at').textContent = '';
+    document.querySelector('.artist-name').style.display = 'none';
+    document.querySelector('.played-at').style.display = 'none';
   }
 }
 
