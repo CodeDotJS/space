@@ -1,8 +1,11 @@
 .spotify-recently-played {
+   font-family: "Andika";
+   text-align: center;
 
   .song-info {
     display: flex;
     align-items: center;
+    gap: 10px;
 
     .music-info {
       display: flex;
@@ -28,6 +31,10 @@
 
     .played-at {
       font-size: 0.9em;
+      background: #207777;
+      padding: 5px 10px;
+      border-radius: 10px;
+      color: white;
     }
   }
 }
