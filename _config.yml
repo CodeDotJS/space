@@ -30,7 +30,7 @@ navbar:
    link: "projects"
  - name: "Artograph"
    link: "art"
- - name: "😎 Cool 🚀"
+ - name: "Cool 🚀"
    link: "updates"
 
 social_sites:
