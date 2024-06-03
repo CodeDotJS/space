@@ -8,6 +8,8 @@
 @import "updates";
 @import "csv";
 @import "socials";
+@import "spotify";
+@import "custom";
 
 @font-face {
     font-family: 'Cascadia Code';
@@ -22,6 +24,9 @@ body {
     background-color: #FFFFDD;
     min-height: 100%;
     font-size: 14px;
+    zoom: 1.2;
+    -moz-transform: scale(1.2);
+    -moz-transform-origin: 0 1;
 
     img {
         filter: grayscale(100%);
@@ -71,7 +76,7 @@ pre, code {
 
 .navbar {
     ul {
-        font-family: "Open Sans", "Spectral", "Cascadia Code";
+        font-family: "Spectral", "Open Sans", "Cascadia Code";
         display: inline-block;
         margin: 0;
         padding: 5px 0 5px 0;
@@ -190,10 +195,7 @@ pre, code {
 }
 
 .content {
-    // font-family:  "IBM Plex Mono";
     font-family: "Spectral", "Andika", sans-serif;
-    // font-size: 16px;
-    // line-height: 1.4;
     ol {
         counter-reset: list;
     }
@@ -258,8 +260,9 @@ pre, code {
     }
     img {
         text-align: center;
-        margin: 10px 10px 10px 10px;
         max-width: $max-width;
+        width: -moz-available;
+        width: -webkit-fill-available;
     }
 
     .color-red {
@@ -326,10 +329,6 @@ table tr th :first-child, table tr td :first-child {
 
 table tr th :last-child, table tr td :last-child {
     margin: 0;
-}
-
-.center {
-    text-align: center;
 }
 
 .post-navigation {
