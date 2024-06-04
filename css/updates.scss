@@ -47,15 +47,66 @@
         }
       }
 
-      .book-progress {
-        height: 12px;
-        background-color: #e5e5e5;
-        border-radius: 6px;
-        overflow: hidden;
+      .book-header {
+        font-family: "Andika";
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
 
-        .progress-bar {
-          height: 80%;
-          background-color: $blue;
+        .cover {
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .details {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          // justify-content: center;
+          // align-items: center;
+        }
+
+        .book-title {
+          // background: #714073;
+          // padding: 5px;
+          // border-radius: 5px;
+          // color: white;
+          font-family: "Spectral";
+        }
+
+        .book-author {
+          font-family: "Andika";
+          font-weight: bold;
+          padding: 5px;
+          background: #ffb9ea;
+          border-radius: 5px;
+        }
+
+        #book-time {
+          background: #24924f;
+          border-radius: 5px;
+          padding: 2px 5px;
+          font-size: 11px;
+          color: white;
+          font-weight: bold;
+        }
+
+        #book-pages {
+          text-align: center;
+          font-size: 11px;
+        }
+
+        .book-progress {
+          background-color: #e5e5e5;
+          border-radius: 6px;
+          overflow: hidden;
+
+          .progress-bar {
+            background-color: $blue;
+            font-weight: bold;
+            // padding: 0px 8px;
+            font-size: 10px;
+          }
         }
       }
     }

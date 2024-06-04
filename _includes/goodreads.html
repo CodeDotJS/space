@@ -1,0 +1,34 @@
+<script>
+    async function fetchReadingData() {
+        const response = await fetch('https://ir8x.vercel.app/reading');
+        const data = await response.json();
+        return data;
+    }
+
+    function parseReadingData(data) {
+        const title = data.title;
+        const author = data.author;
+        const coverImage = data.cover_image;
+        const covered = data.covered;
+        const pagesRead = data.pages_read;
+        const pagesTotal = data.pages_total;
+        const time = data.time;
+
+        return { title, author, coverImage, covered, pagesRead, pagesTotal, time };
+    }
+
+    async function displayReadingActivity() {
+        const data = await fetchReadingData();
+        const { title, author, coverImage, covered, pagesRead, pagesTotal, time } = parseReadingData(data);
+
+        document.getElementById('book-title').innerText = title;
+        document.getElementById('book-author').innerText = `by ${author}`;
+        document.getElementById('book-cover').src = coverImage;
+        document.querySelector('.progress-bar').style.width = `${covered}%`;
+        document.querySelector('.progress-bar').innerText = `${covered}%`;
+        document.getElementById('book-pages').innerText = `${pagesRead} / ${pagesTotal} pages.`;
+        document.getElementById('book-time').innerText = `Updated ${time}`;
+    }
+
+    displayReadingActivity();
+</script>

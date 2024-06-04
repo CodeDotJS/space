@@ -4,6 +4,7 @@ layout: default
 {{content}}
 {% include commit.html %}
 {% include spotify.html %}
+{% include goodreads.html %}
 <div class="update-page">
     <div class="grid-row">
         <div class="card card-blue">
@@ -30,18 +31,26 @@ layout: default
         <div class="card card-pink">
             <h3>Book I'm Reading</h3>
             <div class="book-header">
-                <span class="book-title">Mortality</span>
-                <span class="book-author">Christopher Hitchens</span>
-                <p>PULL DATA FROM PLAY BOOKS</p>
-            </div>
-            <div class="book-progress">
-                <div class="progress-bar" style="width: 75%;"></div>
+                <div class="cover">
+                    <img id="book-cover" src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt="Book Cover">
+                    <span id="book-pages"></span>
+                    <div class="book-progress">
+                        <div class="progress-bar" style="width: 0%; text-align: center;"></div>
+                    </div>
+                </div>
+                <div class="details">
+                    <span id="book-title" class="book-title"></span>
+                    <span id="book-author" class="book-author"></span>
+                    <!-- <p id="book-covered"></p> -->
+
+                    <span id="book-time"></span>
+                </div>
             </div>
         </div>
         <div class="card card-yellow">
             <h3>No Context</h3>
             <p>Feel free to check it out, no worries if not</p>
-            <p>PULL DATA FROM SOME YML FILE</p>
+            <p></p>
         </div>
     </div>
 </div>
