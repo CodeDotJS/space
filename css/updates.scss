@@ -7,7 +7,7 @@
   .grid-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 48px;
+    gap: 30px;
     margin-bottom: 10px;
 
     @media (max-width: $med-width) {
@@ -54,6 +54,7 @@
         align-items: flex-start;
 
         .cover {
+          display: flex;
           flex-direction: column;
           gap: 5px;
         }
@@ -67,27 +68,26 @@
         }
 
         .book-title {
-          background: #714073;
-          padding: 5px;
+          background: #a4c8b5;
+          padding: 10px;
           border-radius: 5px;
-          color: white;
+          // color: white;
           font-family: "Spectral";
         }
 
         .book-author {
           font-family: "Andika";
           font-weight: bold;
-          padding: 5px;
-          background: #ffb9ea;
+          padding: 10px;
+          background: #c9ddcc;
           border-radius: 5px;
         }
 
         #book-time {
-          background: #24924f;
+          background: #d1d1fd;
           border-radius: 5px;
-          padding: 2px 5px;
+          padding: 10px;
           font-size: 11px;
-          color: white;
           font-weight: bold;
         }
 
@@ -104,7 +104,6 @@
           .progress-bar {
             background-color: $blue;
             font-weight: bold;
-            font-size: 10px;
           }
         }
       }
