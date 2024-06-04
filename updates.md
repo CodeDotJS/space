@@ -1,6 +1,5 @@
 ---
 layout: updates
-
 ---
 
 <br>
