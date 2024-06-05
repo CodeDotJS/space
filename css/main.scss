@@ -257,9 +257,8 @@ pre, code {
     }
     img {
         text-align: center;
-        max-width: $max-width;
-        width: -moz-available;
-        width: -webkit-fill-available;
+        max-width: -moz-available;
+        max-width: -webkit-fill-available;
     }
 
     .color-red {
