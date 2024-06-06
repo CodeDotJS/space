@@ -104,9 +104,22 @@
 
           .progress-bar {
             background-color: $blue;
-            font-weight: bold
-;          }
+            font-weight: bold;
+          }
         }
+      }
+
+      .instagram-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+
+          img {
+            border-radius: 10px;
+            height: 100px;
+            width: 100px;
+          }
       }
     }
   }
