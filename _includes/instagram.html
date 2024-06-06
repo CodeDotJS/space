@@ -1,0 +1,16 @@
+<script>
+document.addEventListener("DOMContentLoaded", async function() {
+    try {
+        const response = await fetch('http://ir8x.vercel.app/instagram');
+        const data = await response.json();
+        const images = data.images;
+        const imageElements = document.querySelectorAll('.instagram-container img');
+        for (let i = 0; i < Math.min(imageElements.length, images.length); i++) {
+            imageElements[i].src = 'data:image/jpeg;base64,' + images[i];
+        }
+    } catch (error) {
+        console.error('Error fetching Instagram data:', error);
+    }
+});
+
+</script>
