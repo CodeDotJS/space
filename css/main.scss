@@ -25,15 +25,15 @@ body {
     min-height: 100%;
     font-size: 14px;
 
-    img {
-        filter: grayscale(100%);
-        -webkit-filter: grayscale(100%);
-    }
+    // img {
+    //     filter: grayscale(100%);
+    //     -webkit-filter: grayscale(100%);
+    // }
 
-    img:hover {
-        filter: none;
-        -webkit-filter: grayscale(0);
-    }
+    // img:hover {
+    //     filter: none;
+    //     -webkit-filter: grayscale(0);
+    // }
 }
 
 a {
@@ -55,8 +55,8 @@ hr {
 }
 
 pre, code {
-    font-family: "Cascadia Code";
-    font-size: 14px;
+    font-family: "Inconsolata";
+    // font-size: 14px;
     color: firebrick;
 }
 
@@ -73,7 +73,9 @@ pre, code {
 
 .navbar {
     ul {
-        font-family: "Spectral", "Open Sans", "Cascadia Code";
+        font-family: "Labrada", serif;
+        font-optical-sizing: auto;
+        // font-family: "Spectral", "Open Sans", "Cascadia Code";
         display: inline-block;
         margin: 0;
         padding: 5px 0 5px 0;
