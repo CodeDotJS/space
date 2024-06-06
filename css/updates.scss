@@ -63,20 +63,17 @@
           display: flex;
           flex-direction: column;
           gap: 5px;
-          // justify-content: center;
-          // align-items: center;
         }
 
         .book-title {
           background: #a4c8b5;
           padding: 10px;
           border-radius: 5px;
-          // color: white;
           font-family: "Spectral";
         }
 
         .book-author {
-          font-family: "Andika";
+          font-family: "Labrada";
           font-weight: bold;
           padding: 10px;
           background: #c9ddcc;
@@ -96,6 +93,10 @@
           font-size: 11px;
         }
 
+        img {
+          border-radius: 10px;
+        }
+
         .book-progress {
           background-color: #e5e5e5;
           border-radius: 6px;
@@ -103,8 +104,8 @@
 
           .progress-bar {
             background-color: $blue;
-            font-weight: bold;
-          }
+            font-weight: bold
+;          }
         }
       }
     }
