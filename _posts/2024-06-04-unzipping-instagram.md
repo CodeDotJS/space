@@ -4,7 +4,7 @@ title: "Unzipping Instagram"
 tags: [Instagram, API, encoding, decoding, compression, zstd, fixes]
 ---
 
-In my [cool](/updates) section, I have built and integrated the following features:
+In my [cool](../updates) section, I have built and integrated the following features:
 
 - Display my most recent commit to a GitHub repository.
 - Show the most recent song I played on Spotify.
@@ -220,7 +220,7 @@ In my attempt to figure out the solution, I got restricted. I might have made to
 ![instagram-restricted](../assets/images/posts/instagram-restricted.png)
 {: .center}
 
-To avoid issues, the best approach is to either limit the number of requests or to rotate the IP and user agent simultaneously after a certain period of time. Since I won't be frequently visiting my [cool](/updates) page and it might not receive many views, I will add the current working script as a fourth service and display my last three or one Instagram post, depending on my moood.
+To avoid issues, the best approach is to either limit the number of requests or to rotate the IP and user agent simultaneously after a certain period of time. Since I won't be frequently visiting my [cool](../updates) page and it might not receive many views, I will add the current working script as a fourth service and display my last three or one Instagram post, depending on my moood.
 
 __What's next?__
 
