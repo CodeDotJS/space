@@ -1,7 +1,7 @@
 .update-page {
   max-width: $max-width;
   margin: 0 auto;
-  font-family: 'Spectral', 'Andika', Arial, sans-serif;
+  font-family: "Spectral", "Andika", Arial, sans-serif;
   color: $primary-color;
 
   .grid-row {
@@ -115,11 +115,11 @@
         gap: 10px;
         justify-content: center;
 
-          img {
-            border-radius: 10px;
-            height: 100px;
-            width: 100px;
-          }
+        img {
+          border-radius: 10px;
+          height: 100px;
+          width: 100px;
+        }
       }
     }
   }
