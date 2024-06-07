@@ -213,7 +213,7 @@ if __name__ == '__main__':
 
 By using the `zstd` module and directly decompressing the response content with `zstd.decompress(response.content)`, I was able to parse the decompressed data as JSON without any issues.
 
-__*Update*__ -
+__*but...*__
 
 In my attempt to figure out the solution, I got restricted. I might have made too many requests and as of now I'm being blocked from accessing any resources. Funny :snail:
 
@@ -226,8 +226,107 @@ __What's next?__
 
 I plan to test all the user agents listed in [this collection](https://user-agents.net/download?browser_type=application&browser=instagram-app&version=37-0) and utilize free proxies from [SSL Proxy List](https://www.sslproxies.org/#list) to monitor how things progress.
 
-__*Footnotes:*__
+
+__*Updates*__
+
+I still need to test all the user agents, but I was in a rush to integrate the feature that shows my last four posts from my Instagram art account.
+
+The task was fairly straightforward, as my API was returning data successfully.
+
+```sh
+$ curl https://ir8x.vercel.app/instagram | jq
+```
+
+So, I wrote a simple script -
+
+```js
+const response = await fetch('https://ir8x.vercel.app/instagram');
+const data = await response.json();
+
+const edges = data.data.user.edge_owner_to_timeline_media.edges;
+
+for (let i = 0; i < 4; i++) {
+    const artworks = document.getElementById(`image-${i + 1}`);
+    if (artworks && edges[i]) {
+        artworks.src = edges[i].node.thumbnail_resources[0].src;
+    }
+}
+```
+
+which inserts the image link into the following HTML -
+
+```html
+<div class="instagram-container">
+    <img id="image-1" src="" alt="Image 1" >
+    <img id="image-2" src="" alt="Image 2">
+    <img id="image-3" src="" alt="Image 3">
+    <img id="image-4" src="" alt="Image 4">
+</div>
+```
+
+__Problem__
+
+`Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://scontent-iad3-1.cdninstagram.com/v/t51.29350-15/440114385_762901505597462_6424360476771940236_n.webp (Reason: CORS header ‘Access-Control-Allow-Origin’ missing). Status code: 200.`
+
+Adding the line `CORS(app)` to my Flask API wouldn't have solved the problem, so I had to think of a different solution. Since I didn't want to make extensive changes, I decided to encode the images to base64 and return that, which provided an easy fix. One important consideration is that I'm not adding links to any of the updates I'm showing, so I can return only what's needed. All I needed was the last four posts from my Instagram art account, so I made some changes to the original script.
+
+```python
+base64_images = []
+for edge in json_data['data']['user']['edge_owner_to_timeline_media']['edges'][:4]:
+    image_url = edge['node']['thumbnail_resources'][0]['src']
+    image_response = requests.get(image_url)
+    if image_response.status_code == 200:
+        base64_data = base64.b64encode(image_response.content).decode('utf-8')
+        base64_images.append(base64_data)
+    else:
+        base64_images.append(None)
+
+return jsonify({'images': base64_images})
+```
+
+
+This would return response as -
+
+```json
+{
+"images": ["/9j/4AAQSkZJRgABAQAAAQABAAD/...",
+           "/9j/4AAQSkZJRgABAQAAAQABAAD/...",
+           "/9j/4AAQSkZJRgABAQAAAQABAAD/...",
+           "/9j/4AAQSkZJRgABAQAAAQABAAD/..."]
+}
+```
+
+Then I made a slight change in the JS snippet -
+
+```js
+const data = await response.json();
+const images = data.images;
+
+const artworks = document.querySelectorAll('.instagram-container img');
+for (let i = 0; i < Math.min(artworks.length, images.length); i++) {
+    artworks[i].src = 'data:image/jpeg;base64,' + images[i];
+}
+```
+
+and it worked -
+
+<img src="{{site.baseurl}}/assets/images/posts/instagram-update.png" alt="">
+{: .center}
+
+Before this, I wasted some time because of `Mixed Content`.
+
+
+> What is Mixed Content? <br><br>
+When a user visits a page served over HTTP, their connection is open for eavesdropping and man-in-the-middle (MITM) attacks. When a user visits a page served over HTTPS, their connection with the web server is authenticated and encrypted with SSL and hence safeguarded from eavesdroppers and MITM attacks. <br><br> However, if an HTTPS page includes HTTP content, the HTTP portion can be read or modified by attackers, even though the main page is served over HTTPS. When an HTTPS page has HTTP content, we call that content “mixed”. The webpage that the user is visiting is only partially encrypted, since some of the content is retrieved unencrypted over HTTP. The Mixed Content Blocker blocks certain HTTP requests on HTTPS pages.[^3]
+
+I made a typo. Instead of fetch('https://ir8x.vercel.app/instagram'), I was using fetch('http://ir8x.vercel.app/instagram'). Changing the protocol solved my issue.
+
+I have now integrated it into my [cool](../updates) page, and it looks good. Building this was a bit of a roller coaster ride, but I had fun.
+
+---
+
+__Footnotes:__
 
 [^1]: [Compression - Everything CURL](https://everything.curl.dev/usingcurl/downloads/compression.html)
 [^2]: [CURL 7.72.0 - More Compression](https://daniel.haxx.se/blog/2020/08/19/curl-7-72-0-more-compression/)
-
+[^3]: [Mixed Content Blocking Enabled in Firefox 23](https://blog.mozilla.org/tanvi/2013/04/10/mixed-content-blocking-enabled-in-firefox-23/)
