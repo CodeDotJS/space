@@ -319,7 +319,7 @@ Before this, I wasted some time because of `Mixed Content`.
 > What is Mixed Content? <br><br>
 When a user visits a page served over HTTP, their connection is open for eavesdropping and man-in-the-middle (MITM) attacks. When a user visits a page served over HTTPS, their connection with the web server is authenticated and encrypted with SSL and hence safeguarded from eavesdroppers and MITM attacks. <br><br> However, if an HTTPS page includes HTTP content, the HTTP portion can be read or modified by attackers, even though the main page is served over HTTPS. When an HTTPS page has HTTP content, we call that content “mixed”. The webpage that the user is visiting is only partially encrypted, since some of the content is retrieved unencrypted over HTTP. The Mixed Content Blocker blocks certain HTTP requests on HTTPS pages.[^3]
 
-I made a typo. Instead of fetch('https://ir8x.vercel.app/instagram'), I was using fetch('http://ir8x.vercel.app/instagram'). Changing the protocol solved my issue.
+I made a typo. Instead of `fetch('https://ir8x.vercel.app/instagram')`, I was using `fetch('http://ir8x.vercel.app/instagram')`. Changing the protocol solved my issue.
 
 I have now integrated it into my [cool](../updates) page, and it looks good. Building this was a bit of a roller coaster ride, but I had fun.
 
