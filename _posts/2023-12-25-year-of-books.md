@@ -45,7 +45,7 @@ I also covered a few essays and articles by George Orwell, and at this point, I 
 - [Inside the Whale](https://orwell.ru/library/essays/whale/english/e_itw)
 
 
-I read *Such, Such Were the Joys* because I remember seeing in mentioned somewhere in Christopher Hitchen's __*Hitch-22*__. It was an accidental find.
+I read __*Such, Such Were the Joys*__ because I remember seeing it mentioned somewhere in Christopher Hitchens's *Hitch-22*. It was an accidental find.
 
 
 __*and*__
