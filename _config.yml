@@ -28,8 +28,6 @@ navbar:
    link: "blog"
  - name: "Projects"
    link: "projects"
- - name: "Artograph"
-   link: "art"
  - name: "Cool 🚀"
    link: "updates"
 
