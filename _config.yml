@@ -10,7 +10,7 @@ footer_url: ""
 footer_text: "∞"
 
 profile-picture: assets/cat.png
-favicon_location: assets/favicon.ico
+favicon_location: assets/favicon.svg
 
 permalink: /:year-:month-:day-:title/
 sass:
