@@ -18,6 +18,7 @@ sass:
     sass_dir: css
 
 include:
+  - assets
   - assets/data
   - assets/fonts
 
