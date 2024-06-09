@@ -21,6 +21,16 @@ include:
   - assets/data
   - assets/fonts
 
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - _site
+  - .jekyll-cache
+  - .bundle
+  - .git
+  - .gitignore
+  - README.md
+
 navbar:
  - name: "Home"
    link: ""
