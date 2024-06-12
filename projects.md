@@ -1,5 +1,6 @@
 ---
 layout: projects
+title: Brainchild
 ---
 
 <br>

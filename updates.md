@@ -1,5 +1,6 @@
 ---
 layout: updates
+title: It's All Good!
 ---
 
 <br>
