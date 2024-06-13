@@ -1,72 +1,88 @@
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      fetch('https://ir8x.vercel.app/coding')
-        .then(response => response.json())
-        .then(data => {
-          const labels = data.map(entry => {
-            const date = new Date(entry.date);
-            return date.toLocaleDateString('en-GB', {
-              day: '2-digit',
-              month: 'short'
-            });
-          }).reverse();
-          const hours = data.map(entry => entry.hours + entry.minutes / 60).reverse();
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+		fetch('https://ir8x.vercel.app/coding')
+				.then(response => response.json())
+				.then(data => {
+						const labels = data.map(entry => {
+								const date = new Date(entry.date);
+								return date.toLocaleDateString('en-GB', {
+										day: '2-digit',
+										month: 'short'
+								});
+						}).reverse();
+						const hours = data.map(entry => entry.hours + entry.minutes / 60).reverse();
 
-          const ctx = document.getElementById('codingChart').getContext('2d');
-          const codingChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: labels,
-              datasets: [{
-                label: 'Coding Hours',
-                data: hours,
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 3,
-                fill: false,
-                tension: 0.5
-              }]
-            },
-            options: {
-              scales: {
-                x: {
-                  title: {
-                    display: true,
-                    text: 'Date'
-                  }
-                },
-                y: {
-                  title: {
-                    display: true,
-                    text: 'Hours'
-                  },
-                  beginAtZero: true
-                }
-              },
-              plugins: {
-                title: {
-                  display: false,
-                  text: 'Time Spent in Text Editor'
-                },
-                legend: {
-                  display: false
-                },
-                tooltip: {
-                  callbacks: {
-                    label: function(context) {
-                      const totalMinutes = context.raw * 60;
-                      const hours = Math.floor(totalMinutes / 60);
-                      const minutes = Math.round(totalMinutes % 60);
-                      return `${hours} Hours ${minutes} Minutes`;
-                    }
-                  }
-                }
-              }
-            }
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    });
-  </script>
+						const backgroundColors = hours.map((_, index) => {
+								const hue = index * (360 / hours.length);
+								return `hsl(${hue}, 20%, 60%)`;
+						});
+
+						const ctx = document.getElementById('codingChart').getContext('2d');
+						const codingChart = new Chart(ctx, {
+								type: 'bar',
+								data: {
+										labels: labels,
+										datasets: [{
+														type: 'bar',
+														label: 'Coding Hours (Bars)',
+														data: hours,
+														backgroundColor: backgroundColors,
+														borderColor: backgroundColors,
+														borderWidth: 1,
+														barThickness: 10
+												},
+												{
+														type: 'line', // Line dataset
+														label: 'Coding Hours (Line)',
+														data: hours,
+														backgroundColor: 'rgba(0,0,0,0)',
+														borderColor: 'rgba(0,0,0,0.5)',
+														borderWidth: 2,
+														fill: false,
+														tension: 0.5
+												}
+										]
+								},
+								options: {
+										scales: {
+												x: {
+														title: {
+																display: true,
+																text: 'Date'
+														}
+												},
+												y: {
+														title: {
+																display: true,
+																text: 'Hours'
+														},
+														beginAtZero: true
+												}
+										},
+										plugins: {
+												title: {
+														display: false,
+														text: 'Time Spent in Text Editor'
+												},
+												legend: {
+														display: false
+												},
+												tooltip: {
+														callbacks: {
+																label: function(context) {
+																		const totalMinutes = context.raw * 60;
+																		const hours = Math.floor(totalMinutes / 60);
+																		const minutes = Math.round(totalMinutes % 60);
+																		return `${hours} Hours ${minutes} Minutes`;
+																}
+														}
+												}
+										}
+								}
+						});
+				})
+				.catch(error => {
+						console.error('Error fetching data:', error);
+				});
+});
+</script>
