@@ -323,6 +323,17 @@ I made a typo. Instead of `fetch('https://ir8x.vercel.app/instagram')`, I was us
 
 I have now integrated it into my [cool](../updates) page, and it looks good. Building this was a bit of a roller coaster ride, but I had fun.
 
+__*Updates*__ --- 14<sup>th</sup> June, 2024
+{: .center}
+
+I wouldn't I'm surprised to see the I'm issue I'm facing, but now the backend, which is hosted on Vercel, is returning:
+
+- `Error 500: Failed to decompress response`
+
+On the local server, the script is returning the data without throwing any errors. So, I'm guessing it's more of an IP restriction (or block?) because I tested a few more user agents locally, and they were working. However, pushing the code to production with those user agents didn't solve the issue, as I'm still getting the same error.
+
+To prevent this, I think it's fair if I don't fetch the data from Instagram every time someone visits the cool page. It makes sense because I don't draw very often. I'll see what I can do to fix this issue, but as of now, my doodle section is empty.
+
 ---
 
 __Footnotes:__
