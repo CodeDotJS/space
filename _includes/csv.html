@@ -1,7 +1,8 @@
 <div class="csv-container">
     <label for="row-count-{{ include.file }}">Number of rows to display:</label>
-    <input type="number" id="row-count-{{ include.file }}" value="{{ include.row }}" min="1" oninput="loadCSV('{{ include.file }}', this.value)">
+    <input type="number" id="row-count-{{ include.file }}" value="{{ include.row | default: 5 }}" min="1" oninput="loadCSV('{{ include.file }}', this.value)">
 </div>
+
 <div class="csv-container">
     <table id="csv-table-{{ include.file }}" class="csv-table">
         <thead id="csv-header-{{ include.file }}"></thead>
@@ -12,7 +13,7 @@
 <script src="{{site.baseurl}}/assets/script/papaparse.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        loadCSV('{{ include.file }}', {{ include.row }});
+        loadCSV('{{ include.file }}', {{ include.row | default: 5 }});
     });
 
     function loadCSV(file, rowCount) {
