@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unzipping Instagram"
-tags: [Instagram, API, encoding, decoding, compression, zstd, fixes]
+tags: [Instagram, decoding, compression, zstd]
 ---
 
 In my [cool](../updates) section, I have built and integrated the following features:
