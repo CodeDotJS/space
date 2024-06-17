@@ -1,41 +1,97 @@
 input {
     text-align: center;
-    width: 80px;
+    width: 50px;
+    border-radius: 5px;
+    border: 2px solid #cec7fa;
 }
 
 .csv-container {
-    font-family: "Spectral";
+    font-family: "Inconsolata";
     overflow-x: auto;
-    border-radius: 5px;
-    text-align: center;
-}
 
-.csv-table {
-    width: 100%;
-    border-collapse: collapse;
+    .csv-details {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
 
-    th, td {
+        .left-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+
+            span {
+                margin-right: 5px;
+
+                &:before {
+                    margin-right: 5px;
+                }
+
+                &.csv-size:before {
+                    content: "\f0e0";
+                    font-family: 'FontAwesome';
+                }
+
+                &.csv-rows:before {
+                    content: "\f0ce";
+                    font-family: 'FontAwesome';
+                }
+
+                &.csv-columns:before {
+                    content: "\f0c7";
+                    font-family: 'FontAwesome';
+                }
+            }
+
+            .csv-download {
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+
+                &:hover {
+                    background-color: aliceblue;
+                }
+
+                &:before {
+                    content: "\f019";
+                    font-family: 'FontAwesome';
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th, td {
+            padding: 0.3rem;
+            text-align: left;
+            border: 0.8px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: transparent;
+        }
+
+        th {
+            background-color: #cec7fa;
+            font-weight: bold;
+        }
+    }
+
+    @media (max-width: 600px) {
         padding: 0.5rem;
-        text-align: left;
-        border: 1px solid #ddd;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        background-color: #ffffdf;
-    }
 
-    th {
-        background-color: #cec7fa;
-        font-weight: bold;
-    }
-}
-
-@media (max-width: 600px) {
-    .csv-container {
-        padding: 0.5rem;
-    }
-
-    th, td {
-        padding: 0.25rem;
+        th, td {
+            padding: 0.25rem;
+        }
     }
 }
