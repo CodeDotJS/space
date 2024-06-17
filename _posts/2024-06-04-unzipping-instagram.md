@@ -346,7 +346,7 @@ Free proxies are useless. I tested so many of them but had zero success. But I d
 <img src="{{site.baseurl}}/assets/images/posts/igrestrict.png" alt="">
 {: .center}
 
-I'm taking a short break from this, and since I'm not making any art, I've embedded the `base641` of the last four posts from my [art account](https://instagram.com/iama_rishi.art) directly on the Updates page.
+I'm taking a short break from this, and since I'm not making any art, I've embedded the `base64` of the last four posts from my [art account](https://instagram.com/iama_rishi.art) directly on the Updates page.
 
 ---
 
