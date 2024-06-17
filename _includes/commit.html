@@ -3,10 +3,11 @@ async function fetchLatestCommit() {
     try {
         const response = await fetch('https://api.github.com/users/CodeDotJS/events/public');
         const events = await response.json();
+
         if (events.length > 0) {
             const latestEvent = events.find(event => event.type === 'PushEvent');
             if (latestEvent) {
-            	const base = 'https://github.com/';
+                const base = 'https://github.com/';
 
                 const repoName = latestEvent.repo.name;
                 const commitMessage = latestEvent.payload.commits[0].message;

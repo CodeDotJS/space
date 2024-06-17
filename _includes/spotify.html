@@ -1,37 +1,37 @@
 <script>
 async function fetchLastPlayedSong() {
-  try {
-    const response = await fetch('https://ir8x.vercel.app/listening');
-    const data = await response.json();
+    try {
+        const response = await fetch('https://ir8x.vercel.app/listening');
+        const data = await response.json();
 
-    if (data) {
-      const songName = data.song_name;
-      const cover = data.cover;
-      const artistName = data.artist_name;
-      const playedAt = new Date(data.played_at);
-      const currentTime = new Date();
-      const timeDifference = Math.abs(currentTime - playedAt);
-      const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-      const hoursDifference = Math.floor(minutesDifference / 60);
-      const formattedTime = hoursDifference > 0 ? `${hoursDifference} hours ago` : `${minutesDifference} minutes ago`;
+        if (data) {
+            const songName = data.song_name;
+            const cover = data.cover;
+            const artistName = data.artist_name;
+            const playedAt = new Date(data.played_at);
+            const currentTime = new Date();
+            const timeDifference = Math.abs(currentTime - playedAt);
+            const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+            const hoursDifference = Math.floor(minutesDifference / 60);
+            const formattedTime = hoursDifference > 0 ? `${hoursDifference} hours ago` : `${minutesDifference} minutes ago`;
 
-      document.querySelector('.song-name').textContent = songName;
-      document.querySelector('.song-cover').src = cover;
-      document.querySelector('.artist-name').textContent = `by ${artistName}`;
-      document.querySelector('.played-at').textContent = `${formattedTime}`;
-    } else {
-      document.querySelector('.song-name').textContent = 'No recent songs found.';
-      document.querySelector('.song-cover').src = '../assets/cat.png';
-      document.querySelector('.artist-name').style.display = 'none';
-      document.querySelector('.played-at').style.display = 'none';
+            document.querySelector('.song-name').textContent = songName;
+            document.querySelector('.song-cover').src = cover;
+            document.querySelector('.artist-name').textContent = `by ${artistName}`;
+            document.querySelector('.played-at').textContent = `${formattedTime}`;
+        } else {
+            document.querySelector('.song-name').textContent = 'No recent songs found.';
+            document.querySelector('.song-cover').src = '../assets/cat.png';
+            document.querySelector('.artist-name').style.display = 'none';
+            document.querySelector('.played-at').style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error fetching last played song:', error);
+        document.querySelector('.song-cover').src = '../assets/cat.png';
+        document.querySelector('.song-name').textContent = 'Error loading song information.';
+        document.querySelector('.artist-name').style.display = 'none';
+        document.querySelector('.played-at').style.display = 'none';
     }
-  } catch (error) {
-    console.error('Error fetching last played song:', error);
-    document.querySelector('.song-cover').src = '../assets/cat.png';
-    document.querySelector('.song-name').textContent = 'Error loading song information.';
-    document.querySelector('.artist-name').style.display = 'none';
-    document.querySelector('.played-at').style.display = 'none';
-  }
 }
 
 fetchLastPlayedSong();
