@@ -1,6 +1,16 @@
 <div class="csv-container">
-    <label for="row-count-{{ include.file }}">Number of rows to display:</label>
-    <input type="number" id="row-count-{{ include.file }}" value="{{ include.row | default: 5 }}" min="1" oninput="loadCSV('{{ include.file }}', this.value)">
+    <div id="csv-details-{{ include.file }}" class="csv-details">
+        <div class="left-section">
+            <label for="row-count-{{ include.file }}"></label>
+            <input type="number" id="row-count-{{ include.file }}" value="{{ include.row | default: 5 }}" min="1" oninput="loadCSV('{{ include.file }}', this.value)">
+        </div>
+        <div class="right-section">
+            <span id="csv-size-{{ include.file }}" class="csv-size"></span>
+            <span id="csv-rows-{{ include.file }}" class="csv-rows"></span>
+            <span id="csv-columns-{{ include.file }}" class="csv-columns"></span>
+            <button id="csv-download-{{ include.file }}" class="csv-download" onclick="downloadCSV('{{ include.file }}')"></button>
+        </div>
+    </div>
 </div>
 
 <div class="csv-container">
@@ -23,6 +33,7 @@
             header: true,
             complete: function(results) {
                 displayCSV(results.data, rowCount, file);
+                displayCSVDetails(results.data, file);
             }
         });
     }
@@ -53,5 +64,29 @@
             });
             body.appendChild(row);
         }
+    }
+
+    function displayCSVDetails(data, file) {
+        const sizeElement = document.getElementById('csv-size-' + file);
+        const rowsElement = document.getElementById('csv-rows-' + file);
+        const columnsElement = document.getElementById('csv-columns-' + file);
+
+        const numberOfRows = data.length;
+        const numberOfColumns = data.length > 0 ? Object.keys(data[0]).length : 0;
+        const sizeInBytes = new Blob([JSON.stringify(data)]).size;
+        const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
+
+        sizeElement.textContent = `${sizeInMB} MB`;
+        rowsElement.textContent = `${numberOfRows}`;
+        columnsElement.textContent = `${numberOfColumns}`;
+    }
+
+    function downloadCSV(file) {
+        const link = document.createElement('a');
+        link.href = '{{site.baseurl}}/assets/data/' + file;
+        link.download = file;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
