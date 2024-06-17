@@ -334,6 +334,20 @@ On the local server, the script is returning the data without throwing any error
 
 To prevent this, I think it's fair if I don't fetch the data from Instagram every time someone visits the cool page. It makes sense because I don't draw very often. I'll see what I can do to fix this issue, but as of now, my doodle section is empty.
 
+
+__*Updates*__ --- 16<sup>th</sup> June, 2024
+{: .center}
+
+Free proxies are useless. I tested so many of them but had zero success. But I did make some attempts to trick Instagram, which resulted in—surprise, surprise—
+
+<img src="{{site.baseurl}}/assets/images/posts/igblocked.png" alt="">
+{: .center}
+
+<img src="{{site.baseurl}}/assets/images/posts/igrestrict.png" alt="">
+{: .center}
+
+I'm taking a short break from this, and since I'm not making any art, I've embedded the `base641` of the last four posts from my [art account](https://instagram.com/iama_rishi.art) directly on the Updates page.
+
 ---
 
 __Footnotes:__
