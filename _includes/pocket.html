@@ -8,27 +8,17 @@ async function fetchPocketItems() {
             const article = data.articles[0];
             document.getElementById('article-link').href = article.resolved_url;
             document.getElementById('article-title').textContent = article.resolved_title || article.given_title || article.resolved_url;
-            // document.getElementById('article-excerpt').textContent = truncateText(article.excerpt, 30);
         }
 
         if (data.videos.length > 0) {
             const video = data.videos[0];
             document.getElementById('video-link').href = video.resolved_url;
             document.getElementById('video-title').textContent = video.resolved_title || video.given_title || video.resolved_url;
-            // document.getElementById('video-excerpt').textContent = truncateText(video.excerpt, 10);
         }
     } catch (error) {
         console.error('Error fetching Pocket items:', error);
     }
 }
-
-// function truncateText(text, wordLimit) {
-//     const words = text.split(' ');
-//     if (words.length > wordLimit) {
-//         return words.slice(0, wordLimit).join(' ') + '...';
-//     }
-//     return text;
-// }
 
 fetchPocketItems();
 </script>
