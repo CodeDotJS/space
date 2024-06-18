@@ -143,4 +143,23 @@
       text-align: center;
     }
   }
+
+  .pocket {
+    .content-item {
+        margin-top: 10px;
+
+        a {
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            text-decoration: none;
+            color: inherit;
+
+            img {
+                margin-right: 10px;
+                width: 40px;
+            }
+        }
+    }
+  }
 }
