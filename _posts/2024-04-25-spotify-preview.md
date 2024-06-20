@@ -12,7 +12,7 @@ Every year, Spotify releases a Wrapped playlist that contains your 100 most-play
 
 This isn't a major problem in my life, but I decided to fix it by building [YourTopSongs](https://yourtopsongs.vercel.app). I know it should have been MyTopSongs, but I'll change it later sometime in the future, if god's willing.
 
-## Phase Preparing Data
+## Preparing Data
 {: .center}
 
 Since Spotify API doesn't provide a way to interact with content of Wrapped, and my need involved everything related to the yearly wrapped, the best way I could think of is to use [Spotipy](https://spotipy.readthedocs.io/en/2.24.0/), and go through all the playlists and scrape the content of playlists whose name starts with "`Your Top Song `"
