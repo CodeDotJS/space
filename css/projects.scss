@@ -1,69 +1,68 @@
 .projects {
-    .project-card {
-        display: flex;
-        overflow: hidden;
-        align-items: center;
+  .project-card {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
 
     @media (max-width: $med-width) {
-        flex-direction: column;
+      flex-direction: column;
     }
 
     img {
-        max-width: 150px;
-        height: auto;
-        border-bottom: 1px solid #ddd;
+      max-width: 150px;
+      height: auto;
+      border-bottom: 1px solid #ddd;
     }
 
     .project-details {
-        padding: 1rem;
+      padding: 1rem;
 
-        h2 {
-            margin-top: 0;
-            font-family: "Andika";
-        }
+      h2 {
+        margin-top: 0;
+        font-family: "Andika";
+      }
 
-        p {
-            margin: 0;
-        }
+      p {
+        margin: 0;
+      }
 
-        @media (max-width: $med-width) {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+      @media (max-width: $med-width) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
     }
 
     .project-links {
-        display: flex;
-        margin-top: 10px;
-        font-family: "Cascadia Code";
+      display: flex;
+      margin-top: 10px;
+      font-family: "Cascadia Code";
 
-        a {
-            color: #333;
-            text-decoration: none;
-            padding: 0.25rem 0.5rem;
-            border: 1px solid #fff;
-            border-radius: 38px;
-            transition: background-color 0.3s;
-            background: #f7c7f0;
-            padding: 5px 10px;
-            transition: background-color 0.3s;
+      a {
+        color: #333;
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #fff;
+        border-radius: 38px;
+        transition: background-color 0.3s;
+        background: #f7c7f0;
+        padding: 5px 10px;
+        transition: background-color 0.3s;
+        font-size: 16px;
 
-            &:hover {
-                background-color: #f0f0f0;
-            }
-
-            &:not(:last-child) {
-                margin-right: 1rem;
-            }
+        &:hover {
+          background-color: #f0f0f0;
         }
 
-        @media (max-width: $small-width) {
-            align-items: center;
-            font-size: 10px;
+        &:not(:last-child) {
+          margin-right: 1rem;
         }
+      }
+
+      @media (max-width: $small-width) {
+        align-items: center;
+      }
     }
+  }
 }
-}
-
