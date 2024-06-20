@@ -7,13 +7,14 @@
   title: "Your Top Songs"
   description: "Scrapes all of your Spotify Wrapped playlists, generates a frontend interface that displays a randomized selection of song previews, allows listening to the previews without relying on the Spotify API, and enables opening favorite songs for full playback."
   github: "YourTopSongs"
-  blog: "2024-03-25-spotify-preview"
+  blog: "2024-04-25-spotify-preview"
   preview: "https://yourtopsongs.vercel.app"
 
 - image: "steps.png"
   title: "Delhi Art Gallery - API / Quizz Game"
   description: "🔥 Python scripts for scraping, building dataset/database, developing API and a quizz game for the Delhi Art Gallery (DAG) website."
   github: "DAG-World"
+  blog: "2024-03-23-dagworld"
   preview: "https://quizart.vercel.app"
 
 - image: "starexports.png"

@@ -17,13 +17,13 @@ layout: default
                 <p>{{ project.description }}</p>
                 <div class="project-links">
                     {% if project.github %}
-                        <a href="https://github.com/CodeDotJS/{{ project.github }}">GitHub</a>
+                        <a href="https://github.com/CodeDotJS/{{ project.github }}"><i class="fa fa-github"></i></a>
                     {% endif %}
                     {% if project.blog %}
-                        <a href="{{site.baseurl}}/{{ project.blog }}">Blog Post</a>
+                        <a href="{{site.baseurl}}/{{ project.blog }}"><i class="fa fa-pen"></i></a>
                     {% endif %}
                     {% if project.preview %}
-                        <a href="{{ project.preview }}">Preview</a>
+                        <a href="{{ project.preview }}"><i class="fa fa-link"></i></a>
                     {% endif %}
                 </div>
             </div>
