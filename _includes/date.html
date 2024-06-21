@@ -1,0 +1,8 @@
+{% assign format = "%I:%M %p on %B %d, %Y" %}
+{% if include.only == "time" %}
+  {% assign format = "%I:%M %p" %}
+{% elsif include.only == "date" %}
+  {% assign format = "%B %d, %Y" %}
+{% endif %}
+{% assign current_time = 'now' | date: format %}
+<span class="time"><i class="fa fa-clock"></i> &nbsp; {{ current_time }} </span>

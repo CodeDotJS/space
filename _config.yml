@@ -53,3 +53,5 @@ social_sites:
 
 plugins:
   - jemoji
+
+timezone: Asia/Kolkata
