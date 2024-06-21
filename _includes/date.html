@@ -4,5 +4,11 @@
 {% elsif include.only == "date" %}
   {% assign format = "%B %d, %Y" %}
 {% endif %}
-{% assign current_time = 'now' | date: format %}
+
+{% if include.custom %}
+  {% assign current_time = include.custom %}
+{% else %}
+  {% assign current_time = 'now' | date: format %}
+{% endif %}
+
 <span class="time"><i class="fa fa-clock"></i> &nbsp; {{ current_time }} </span>
