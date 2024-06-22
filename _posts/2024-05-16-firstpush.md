@@ -123,7 +123,7 @@ https://api.github.com/repos/facebook/react/commits?
 
 ```js
 Math.ceil(Total Commits / 30)
-
+```
 
 ```js
 Math.ceil(Total Commits / 30)
