@@ -204,15 +204,6 @@ $ curl https://api.github.com/repos/facebook/react/commits?page=632 | jq
 
 ---
 
-__//__
-{: .center}
-
-[FirstPush](https://firstpush.vercel.app) has been built using one of the logics. It's also fast. You can check the source code on [GitHub](https://github.com/codedotjs/firstpush).
+- *[FirstPush](https://firstpush.vercel.app) has been built using one of the logics. It's also fast. You can check the source code on [GitHub](https://github.com/codedotjs/firstpush).*
 
 ---
-
-__Whining__
-{: .center}
-
-I didn't bother coming back to this post, but I thought I should just finish what I started writing. Looks like I ended up taking a month-long gap. Nevertheless, it's all done now.
-
