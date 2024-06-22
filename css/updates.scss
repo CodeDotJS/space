@@ -145,21 +145,31 @@
   }
 
   .pocket {
-    .content-item {
+     .content-item {
         margin-top: 10px;
 
         a {
             display: flex;
             align-items: center;
-            font-size: 1.1em;
+            font-size: 1.2em;
             text-decoration: none;
-            color: inherit;
 
             img {
                 margin-right: 10px;
-                width: 40px;
+                width: 24px;
+                height: 24px;
             }
         }
+
+        p {
+            margin-top: 5px;
+        }
+
+        .excerpt {
+          font-family: "Andika";
+          font-style: normal;
+        }
+      }
     }
   }
-}
+
