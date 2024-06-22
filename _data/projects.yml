@@ -44,7 +44,7 @@
   title: "FirstPush"
   description: "Trace the history of a GitHub repository back to its very first commit. It's fast and built using Flask and Vanilla JavaScript."
   github: "firstpush"
-  blog: "2024-05-08-firstpush"
+  blog: "2024-05-16-firstpush"
   preview: "https://firstpush.vercel.app"
 
 - image: "gimozi.png"
