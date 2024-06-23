@@ -39,7 +39,6 @@ body {
 a {
     text-decoration: none;
     color: $accent;
-    transition: all 1s;
 }
 
 a:hover {
@@ -162,9 +161,7 @@ pre, code {
 }
 
 @media (max-width: 500px) {
-    .post-card .title, .post-card .details {
-        // font-size: 12px;
-    }
+    .post-card .title, .post-card .details {}
 	.navbar {
 		text-align: center;
         padding: 50px 0px 0px 0px;
@@ -177,7 +174,6 @@ pre, code {
             float: none;
             text-align: center;
             width: 100%;
-            // font-size: 13px;
         }
         li{
             margin: 0;
@@ -275,16 +271,24 @@ pre, code {
         color: #0062ff;
     }
     .highlight-red {
-        background-color: #ffaaaa;
+        border-bottom: 2.5px solid red;
+        a:hover {
+            color: black;
+            border-bottom: 2.5px solid green;
+        }
     }
     .highlight-orange {
-        background-color: #ffd486;
+        border-bottom: 2.5px solid darkorange;
     }
     .highlight-green {
-        background-color: #aaffad;
+        border-bottom: 2.5px solid green;
     }
     .highlight-blue {
-        background-color: #d8e7ff;
+        border-bottom: 2.5px solid blue;
+        a:hover {
+            color: black;
+            background-color: #ababfc;
+        }
     }
 }
 
