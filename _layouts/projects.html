@@ -10,7 +10,7 @@ layout: default
             {% if project.image contains 'http' %}
                 <img src="{{ project.image }}" alt="{{ project.title }} image">
             {% else %}
-                <img src="{{site.baseurl}}/assets/blogpost/{{ project.image }}" alt="{{ project.title }} image">
+                <img src="{{site.baseurl}}/assets/projects/{{ project.image }}" alt="{{ project.title }} image">
             {% endif %}
             <div class="project-details">
                 <h2>{{ project.title }}</h2>
