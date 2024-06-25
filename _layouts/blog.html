@@ -1,7 +1,8 @@
 ---
 layout: default
-title: Thoughts, Events, Judgements
 ---
+
+{{ content }}
 
 {% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
 {% assign has_post = false %}
