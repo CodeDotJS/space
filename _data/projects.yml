@@ -1,3 +1,9 @@
+- image: "ir8x-services.svg"
+  title: "ir8x services"
+  description: "A collection of scripts that pull data from Spotify, GitHub, WakaTime, Pocket, Instagram, and Goodreads, all working together to power my Cool page 🚀"
+  blog: "2024-06-25-cool-updates.md"
+  preview: "../updates"
+
 - image: "moma.png"
   title: "Museum of Modern Art - Dataset"
   description: "MoMA Artworks Scraper and Dataset Builder is designed to collect and organize data about artworks and artists from the Museum of Modern Art (MoMA). The dataset contains 100,110 artworks and 27,385 artists."
