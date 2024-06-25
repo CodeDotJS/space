@@ -10,6 +10,8 @@ layout: default
 {% include instagram.html %}
 {% include wakatime.html %}
 {% include pocket.html %}
+{% include words.html %}
+{% include quote.html %}
 
 <div class="update-page">
     <div class="grid-row">
@@ -80,6 +82,27 @@ layout: default
                     <span id="video-title"><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt=""></span>
                 </a>
                 <blockquote class="excerpt" id="video-excerpt"></blockquote>
+            </div>
+        </div>
+    </div>
+    <div class="grid-row bloggo">
+        <div class="card card-blue">
+            <h3>Writing Stats</h3>
+            <div class="word">
+                <i class="fa fa-pen"></i> &nbsp; <span class="highlight-blue"><span id="wordcount"></span> words</span> written combined of <span class="highlight-blue"><span id="blogcount"></span> blog posts</span>, averaging <span class="highlight-blue"><span id="averagewordcount"></span> words</span> per post.
+            </div>
+        </div>
+        <div class="card card-green">
+            <h3>Quote I Liked</h3>
+            <div class="goodquotes">
+                <div class="quote-image">
+                    <img id="author-image" src="" alt="Author Image">
+                </div>
+                <div class="quote-content">
+                    <p id="quote-text" class="quote-text"></p>
+                    <span id="quote-author" class="quote-author highlight-red"></span> •
+                    <span id="quote-book-title" class="quote-book-title highlight-blue"></span>
+                </div>
             </div>
         </div>
     </div>
