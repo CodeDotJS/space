@@ -181,19 +181,20 @@
     }
   }
   .goodquotes {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    // display: flex;
+    // align-items: center;
+    // gap: 10px;
 
     img {
-      width: 100%;
-      border-radius: 10px;
+      // width: 100%;
+      // border-radius: 10px;
     }
 
     .quote-text {
-      background: #d5d6eb;
-      padding: 10px;
-      border-radius: 5px;
+      font-family: "Labrada";
+      // background: #d5d6eb;
+      // padding: 10px;
+      // border-radius: 5px;
     }
   }
 }

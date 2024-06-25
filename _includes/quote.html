@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
   fetch('https://ir8x.vercel.app/quote')
     .then(response => response.json())
     .then(data => {
-      document.getElementById('author-image').src = data.image_url;
+      // document.getElementById('author-image').src = data.image_url;
       document.getElementById('quote-text').textContent = `"${data.quote}"`;
       document.getElementById('quote-author').textContent = `- ${data.author}`;
       document.getElementById('quote-book-title').textContent = data.book_title;
