@@ -1,0 +1,32 @@
+{% assign total_words = 0 %}
+{% assign total_posts = site.posts | size %}
+{% for post in site.posts %}
+    {% assign post_words = post.content | number_of_words %}
+    {% assign total_words = total_words | plus: post_words %}
+{% endfor %}
+
+{% assign average_words_per_post = total_words | divided_by: total_posts %}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const totalWords = {{ total_words }};
+    const totalPosts = {{ total_posts }};
+    const averageWordsPerPost = {{ average_words_per_post }};
+    const duration = 1000;
+    const incrementInterval = 5;
+    const step = totalWords / (duration / incrementInterval);
+    let currentCount = 0;
+
+    const interval = setInterval(() => {
+        currentCount += step;
+        if (currentCount >= totalWords) {
+            currentCount = totalWords;
+            clearInterval(interval);
+        }
+        document.getElementById('wordcount').textContent = Math.floor(currentCount).toLocaleString();
+    }, incrementInterval);
+
+    document.getElementById('blogcount').textContent = totalPosts.toLocaleString();
+    document.getElementById('averagewordcount').textContent = averageWordsPerPost.toLocaleString();
+});
+</script>
