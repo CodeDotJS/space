@@ -171,5 +171,30 @@
         }
       }
     }
+  .bloggo {
+    .word {
+      padding: 18px;
+      background: #ffd1e9;
+      border-radius: 10px;
+      text-align: center;
+      font-family: "Labrada";
+    }
   }
+  .goodquotes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .quote-text {
+      background: #d5d6eb;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  }
+}
 
