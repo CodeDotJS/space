@@ -4,7 +4,7 @@ title: "Cool Page ― Start & Ending"
 tags: [thoughts, personal project]
 ---
 
-I really wanted to have an [update page](../updates) where I could pull real-time data from various sources and show them all in one place, but for a long time, I circled around something terrible—trying to build everything all at once and then shove it down to the throat my site. It didn't work out because I never started working on things.
+I really wanted to have an [update page](../updates) where I could pull real-time data from various sources and show them all in one place, but for a long time, I circled around something terrible—trying to build everything all at once and then shove it down to the throat of my site. It didn't work out because I never started working on things.
 
 One of the things that I've experienced is that when I build something and expect it to be perfect when I'm done, I don't really finish the project. But I decided to change the way I do things, especially if it's an old idea. This was my old mindset, though; things have changed since, and now I do iterations over and over until I'm satisfied. This way, I'm able to put out the work and still have the motivation to work on it because I know what I built isn't even close to perfect and will require a lot of tweaking.
 
