@@ -1,7 +1,7 @@
 - image: "ir8x-services.svg"
   title: "ir8x services"
   description: "A collection of scripts that pull data from Spotify, GitHub, WakaTime, Pocket, Instagram, and Goodreads, all working together to power my Cool page 🚀"
-  blog: "2024-06-25-cool-updates.md"
+  blog: "2024-06-28-cool-updates.md"
   preview: "../updates"
 
 - image: "moma.png"
