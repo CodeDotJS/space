@@ -1,0 +1,251 @@
+<div class="artcontainer">
+    <canvas id="myCanvas"></canvas>
+    <div class="speechContainer">
+        <div id="support"></div>
+        <div id="controls">
+            <button id="voiceControlButton">Start Voice Control</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+let volume = 1; // Default volume factor
+let recognition; // Speech recognition instance
+let recognizing = false; // Recognition state
+let shapes = []; // Array to store shape objects
+let flowingLines = []; // Array to store flowing lines
+
+// Function to set canvas size
+function setCanvasSize() {
+    const container = document.querySelector('.artcontainer');
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const canvasAspectRatio = 600 / 500;
+
+    let canvasWidth, canvasHeight;
+
+    if (containerWidth / containerHeight > canvasAspectRatio) {
+        canvasHeight = Math.min(containerHeight * 0.8, 500);
+        canvasWidth = canvasHeight * canvasAspectRatio;
+    } else {
+        canvasWidth = Math.min(containerWidth * 0.9, 600);
+        canvasHeight = canvasWidth / canvasAspectRatio;
+    }
+
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    generateArt(); // Regenerate art when canvas size changes
+}
+
+// Generate random art
+function generateArt() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw random shapes and patterns
+    const numShapes = 20 + Math.floor(Math.random() * 10); // Random number of shapes
+    shapes = []; // Clear existing shapes
+
+    for (let i = 0; i < numShapes; i++) {
+        shapes.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: (30 + Math.random() * 30) * volume * (canvas.width / 600),
+            color: getRandomColor(),
+            isCircle: Math.random() < 0.5
+        });
+    }
+
+    drawShapes();
+    generateFlowingLines();
+}
+
+// Function to draw shapes
+function drawShapes() {
+    shapes.forEach(shape => {
+        ctx.save();
+        ctx.fillStyle = shape.color;
+
+        if (shape.isCircle) {
+            ctx.beginPath();
+            ctx.arc(shape.x, shape.y, shape.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.fillRect(shape.x - shape.size / 2, shape.y - shape.size / 2, shape.size, shape.size);
+        }
+
+        ctx.restore();
+    });
+}
+
+// Function to generate flowing lines
+function generateFlowingLines() {
+    flowingLines = [];
+    shapes.forEach(shape => {
+        if (Math.random() < 0.5) { // 50% chance for each shape to start a line
+            let currentPoint = { x: shape.x, y: shape.y };
+            let path = [currentPoint];
+            let steps = 0;
+            let maxSteps = 100 + Math.random() * 100;
+
+            while (steps < maxSteps) {
+                let nearestShape = findNearestShape(currentPoint, path);
+                if (!nearestShape) break;
+
+                let direction = {
+                    x: nearestShape.x - currentPoint.x,
+                    y: nearestShape.y - currentPoint.y
+                };
+                let length = Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+                direction.x /= length;
+                direction.y /= length;
+
+                let nextPoint = {
+                    x: currentPoint.x + direction.x * 5,
+                    y: currentPoint.y + direction.y * 5
+                };
+
+                path.push(nextPoint);
+                currentPoint = nextPoint;
+                steps++;
+
+                if (length < 5) break; // Reached the target shape
+            }
+
+            flowingLines.push({ path: path, progress: 0, color: getRandomColor() });
+        }
+    });
+    animateFlowingLines();
+}
+
+// Function to find the nearest shape that hasn't been visited
+function findNearestShape(point, path) {
+    let nearestShape = null;
+    let minDistance = Infinity;
+
+    shapes.forEach(shape => {
+        if (!path.some(p => Math.abs(p.x - shape.x) < 5 && Math.abs(p.y - shape.y) < 5)) {
+            let distance = Math.sqrt(Math.pow(shape.x - point.x, 2) + Math.pow(shape.y - point.y, 2));
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestShape = shape;
+            }
+        }
+    });
+
+    return nearestShape;
+}
+
+// Function to animate flowing lines
+function animateFlowingLines() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawShapes();
+
+    flowingLines.forEach(line => {
+        ctx.beginPath();
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = 2 * volume * (canvas.width / 600);
+
+        for (let i = 0; i < Math.floor(line.progress); i++) {
+            if (i === 0) {
+                ctx.moveTo(line.path[i].x, line.path[i].y);
+            } else {
+                ctx.lineTo(line.path[i].x, line.path[i].y);
+            }
+        }
+
+        ctx.stroke();
+        line.progress += 0.5;
+    });
+
+    flowingLines = flowingLines.filter(line => line.progress < line.path.length);
+
+    if (flowingLines.length > 0) {
+        requestAnimationFrame(animateFlowingLines);
+    } else {
+        setTimeout(generateFlowingLines, 1000 + Math.random() * 2000);
+    }
+}
+
+// Function to get a random color
+function getRandomColor() {
+    const r = Math.floor(Math.random() * 250);
+    const g = Math.floor(Math.random() * 250);
+    const b = Math.floor(Math.random() * 250);
+    return `rgb(${r},${g},${b})`;
+}
+
+// Function to handle voice input
+function handleVoiceInput() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        document.getElementById("support").innerText = "Your browser does not support Speech Recognition API."
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = function(event) {
+        const results = event.results;
+        const lastResult = results[results.length - 1][0].transcript;
+        console.log("Speech detected:", lastResult);
+        const volumeLevel = getVolumeLevel(lastResult);
+
+        volume = volumeLevel;
+        generateArt();
+    };
+
+    recognition.onerror = function(event) {
+        console.error("Speech recognition error:", event.error);
+    };
+
+    recognition.onend = function() {
+        if (recognizing) {
+            recognition.start();
+        }
+    };
+}
+
+// Function to get volume level based on the length of the input
+function getVolumeLevel(transcript) {
+    const length = transcript.length;
+    if (length < 10) {
+        return 0.5; // Whisper
+    } else if (length < 20) {
+        return 1; // Normal
+    } else {
+        return 1.5; // Loud
+    }
+}
+
+// Function to toggle voice recognition
+function toggleVoiceRecognition() {
+    if (!recognition) {
+        document.getElementById("support").innerText = "Speech recognition is not supported in your browser.";
+        return;
+    }
+
+    if (recognizing) {
+        recognition.stop();
+        recognizing = false;
+        document.getElementById('voiceControlButton').textContent = 'Start Voice Control';
+    } else {
+        recognition.start();
+        recognizing = true;
+        document.getElementById('voiceControlButton').textContent = 'Stop Voice Control';
+    }
+}
+
+window.addEventListener('resize', setCanvasSize);
+canvas.addEventListener('click', generateArt);
+document.getElementById('voiceControlButton').addEventListener('click', toggleVoiceRecognition);
+
+setCanvasSize();
+handleVoiceInput();
+</script>
