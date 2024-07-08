@@ -1,0 +1,152 @@
+{% capture unique_id %}{% increment global_collage_id %}{% endcapture %}
+
+<div class="collage-container" id="collage-container-{{ unique_id }}">
+  <div class="collage-thumbnails">
+    <div class="collage-thumbnails-inner">
+      {% assign first_image = "" %}
+      {% assign counter = 0 %}
+      {% assign start_index = include.start | default: 1 | minus: 1 %}
+      {% assign end_index = include.end | default: site.static_files.size | minus: 1 %}
+
+      {% if include.file %}
+        {% assign files = include.file | split: ", " %}
+        {% assign first_image = site.baseurl | append: '/assets/images/' | append: include.dir | append: '/' | append: files[0] %}
+        {% for file in files %}
+          <img src="{{ site.baseurl }}/assets/images/{{ include.dir }}/{{ file }}" data-src="{{ site.baseurl }}/assets/images/{{ include.dir }}/{{ file }}" alt="{{ file }}" class="thumbnail lazyload {% if forloop.first %}selected{% endif %}" data-index="{{ forloop.index0 }}" tabindex="0">
+        {% endfor %}
+      {% else %}
+        {% for file in site.static_files %}
+          {% if file.path contains include.dir %}
+            {% assign counter = counter | plus: 1 %}
+            {% if include.start and include.end %}
+              {% if counter > start_index and counter <= end_index %}
+                {% if first_image == "" %}
+                  {% assign first_image = site.baseurl | append: file.path %}
+                {% endif %}
+                <img src="{{ site.baseurl }}{{ file.path }}" data-src="{{ site.baseurl }}{{ file.path }}" alt="{{ file.name }}" class="thumbnail lazyload {% if forloop.first %}selected{% endif %}" data-index="{{ forloop.index0 }}" tabindex="0">
+              {% endif %}
+            {% else %}
+              {% if first_image == "" %}
+                {% assign first_image = site.baseurl | append: file.path %}
+              {% endif %}
+              <img src="{{ site.baseurl }}{{ file.path }}" data-src="{{ site.baseurl }}{{ file.path }}" alt="{{ file.name }}" class="thumbnail lazyload {% if forloop.first %}selected{% endif %}" data-index="{{ forloop.index0 }}" tabindex="0">
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="collage-main">
+    <img id="main-image-{{ unique_id }}" src="{{ first_image }}" alt="Main image">
+    <div class="image-controls">
+      <button class="zoom-in">+</button>
+      <button class="zoom-out">-</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('collage-container-{{ unique_id }}');
+  const thumbnails = container.querySelectorAll('.thumbnail');
+  const mainImage = document.getElementById('main-image-{{ unique_id }}');
+  let currentIndex = 0;
+  let scale = 1;
+  let isDragging = false;
+  let startX, startY, translateX = 0, translateY = 0;
+
+  function changeImage(index) {
+    const src = thumbnails[index].dataset.src;
+    mainImage.src = src;
+    thumbnails.forEach(thumb => thumb.classList.remove('selected'));
+    thumbnails[index].classList.add('selected');
+    currentIndex = index;
+    resetZoom();
+  }
+
+  function resetZoom() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    mainImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+  }
+
+  thumbnails.forEach((thumbnail, index) => {
+    thumbnail.addEventListener('click', () => changeImage(index));
+    thumbnail.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') changeImage(index);
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' && currentIndex > 0) changeImage(currentIndex - 1);
+    if (e.key === 'ArrowRight' && currentIndex < thumbnails.length - 1) changeImage(currentIndex + 1);
+  });
+
+  let touchStartX = 0;
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, false);
+
+  container.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    if (touchEndX < touchStartX && currentIndex < thumbnails.length - 1) changeImage(currentIndex + 1);
+    if (touchEndX > touchStartX && currentIndex > 0) changeImage(currentIndex - 1);
+  }, false);
+
+  const zoomIn = container.querySelector('.zoom-in');
+  const zoomOut = container.querySelector('.zoom-out');
+
+  zoomIn.addEventListener('click', () => {
+    scale *= 1.2;
+    mainImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+  });
+
+  zoomOut.addEventListener('click', () => {
+    scale = Math.max(1, scale / 1.2);
+    mainImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+  });
+
+  mainImage.addEventListener('dblclick', (e) => {
+    if (scale === 1) {
+      scale = 2;
+      const rect = mainImage.getBoundingClientRect();
+      translateX = (rect.width / 2 - e.clientX + rect.left) * (scale - 1) / scale;
+      translateY = (rect.height / 2 - e.clientY + rect.top) * (scale - 1) / scale;
+    } else {
+      resetZoom();
+    }
+    mainImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+  });
+
+  mainImage.addEventListener('mousedown', (e) => {
+    if (scale > 1) {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      mainImage.style.cursor = 'grabbing';
+    }
+  });
+
+  mainImage.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      mainImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    }
+  });
+
+  mainImage.addEventListener('mouseup', () => {
+    isDragging = false;
+    mainImage.style.cursor = 'grab';
+  });
+
+  mainImage.addEventListener('mouseleave', () => {
+    isDragging = false;
+    mainImage.style.cursor = 'grab';
+  });
+
+  changeImage(0);
+});
+</script>
