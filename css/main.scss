@@ -10,6 +10,7 @@
 @import "socials";
 @import "spotify";
 @import "artography";
+@import "collage";
 @import "custom";
 
 @font-face {
@@ -25,16 +26,6 @@ body {
     background-color: #FFFFDD;
     min-height: 100%;
     font-size: 14px;
-
-    // img {
-    //     filter: grayscale(100%);
-    //     -webkit-filter: grayscale(100%);
-    // }
-
-    // img:hover {
-    //     filter: none;
-    //     -webkit-filter: grayscale(0);
-    // }
 }
 
 a {
