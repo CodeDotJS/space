@@ -10,6 +10,41 @@ This place exists solely to showcase the features of this blog. Since I’m too 
 
 ---
 
+# Adding Highlights
+
+| <span class="color-red highlight-red">Red</span> | <span class="highlight-black">Black</span> | <span class="color-blue highlight-blue">Blue </span> | <span class="color-orange highlight-orange">Orange </span> | <span class="color-green highlight-green">Green</span>
+
+```html
+<span class="color-red highlight-red">Red Highlight</span>
+<span class="highlight-black">Black Highlight</span>
+<span class="color-blue highlight-blue">Blue Highlight</span>
+<span class="color-orange highlight-orange">Orange Highlight</span>
+<span class="color-green highlight-green">Green Highlight</span>
+```
+
+<br>
+
+---
+
+# Adding Date/Time
+
+{% include date.html only="date" %}
+
+```
+{% raw %}
+{% include date.html %}
+{% include date.html only="time" %}
+{% include date.html only="date" %}
+{% include date.html custom="2024-07-09 15:30" %}
+{% include date.html custom="2024-07-09 15:30" only="time" %}
+{% include date.html custom="2024-07-09" only="date" %}
+{% endraw %}
+```
+
+<br>
+
+---
+
 # Adding Projects
 
 - Create a `projects.yml` file in `_data` folder.
