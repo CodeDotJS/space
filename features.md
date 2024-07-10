@@ -6,7 +6,88 @@ title: Features
 <span style="border-bottom: 3px solid black;">Existence ft Features</span>
 {: .center}
 
-This place exists solely to showcase the features of this blog. Since I’m too lazy to document everything, I’ll put here what exists on this site.
+This place exists solely to showcase and remember the features of this blog.
+{: .center}
+
+---
+
+# Adding CSV
+
+- First, you need to save the CSV file in `assets/_data/dummy.csv`
+
+```
+{% raw %}
+{% include csv.html file="dummy.csv" row=5 %}
+{% endraw %}
+```
+
+{% include csv.html file="dummy.csv" row=5 %}
+
+<br>
+
+---
+
+# Adding Collage
+
+There are various ways to setup slider/collage in the blog post or anywhere -
+
+```
+{% raw %}
+1. {% include collage.html dir="June" %}
+2. {% include collage.html dir="March" file="heat.png, water.svg" %}
+3. {% include collage.html dir="April" start=2 end=6 %}
+{% endraw %}
+````
+
+{% include collage.html dir="assets" start=2 end=5 %}
+
+```
+{% raw %}
+
+{% include collage.html dir="assets" start=2 end=5 %}
+
+{% endraw %}
+```
+{: .center }
+
+- The first option lets you show all the image of the folder "June" of `assets/images/June`
+- Through second option, you can choose which images you have to show.
+- If you wish to include a range of images, you can specific it. Index starts at zero.
+
+<br>
+
+---
+
+# Adding Books
+
+The cover image is generated randomly. It also changes on a click.
+
+{% include book.html
+   name="Crime and Punishment"
+   author="Fyodor Dostoevysky"
+   started="January 9, 2024"
+   finished="June 2, 2024"
+   rating="4" progress="100"
+   url="https://www.goodreads.com/book/show/7144.Crime_and_Punishment"
+   tags="Fiction, Classic Literature, Novel"
+   description="Fyodor Dostoevsky's Crime and Punishment is a masterful psychological exploration of guilt and redemption. The novel's protagonist, Raskolnikov, is compelling in his complex moral struggle and descent into madness after committing murder. Dostoevsky's vivid portrayal of 19th-century St. Petersburg adds depth to the narrative. The philosophical dialogues are profound, though occasionally dense. Overall, it's a thought-provoking and intense read that leaves a lasting impact." %}
+
+```
+{% raw %}
+
+{% include book.html
+   name="Crime and Punishment"
+   author="Fyodor Dostoevysky"
+   started="January 9, 2024"
+   finished="June 2, 2024"
+   rating="4"
+   progress="100"
+   url="https://www.goodreads.com/book/show/7144.Crime_and_Punishment"
+   tags="Fiction, Classic Literature, Novel"
+   description="Fyodor Dostoevsky's Crime and Punishment...lasting impact." %}
+
+{% endraw %}
+```
 
 ---
 
@@ -59,53 +140,6 @@ This place exists solely to showcase the features of this blog. Since I’m too 
 ```
 
 - `image` can be the URL or the file saved in `assets/projects/`
-
-<br>
-
----
-
-# Adding CSV
-
-- First, you need to save the CSV file in `assets/_data/dummy.csv`
-
-```
-{% raw %}
-{% include csv.html file="dummy.csv" row=5 %}
-{% endraw %}
-```
-
-{% include csv.html file="dummy.csv" row=5 %}
-
-<br>
-
----
-
-# Adding Collage
-
-There are various ways to setup slider/collage in the blog post or anywhere -
-
-```
-{% raw %}
-1. {% include collage.html dir="June" %}
-2. {% include collage.html dir="March" file="heat.png, water.svg" %}
-3. {% include collage.html dir="April" start=2 end=6 %}
-{% endraw %}
-````
-
-{% include collage.html dir="assets" start=2 end=5 %}
-
-```
-{% raw %}
-
-{% include collage.html dir="assets" start=2 end=5 %}
-
-{% endraw %}
-```
-{: .center }
-
-- The first option lets you show all the image of the folder "June" of `assets/images/June`
-- Through second option, you can choose which images you have to show.
-- If you wish to include a range of images, you can specific it. Index starts at zero.
 
 <br>
 
