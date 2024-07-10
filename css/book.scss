@@ -1,9 +1,13 @@
 .book-info-card {
   font-family: 'Labrada', sans-serif;
-  background-color: #f8f9fa;
+  background-color: #548cf433;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 20px;
+  margin-top: 50px;
+
+  &:not(.status-active) {
+    display: none;
+  }
 
   .book-header {
     display: flex;

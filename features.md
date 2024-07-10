@@ -63,6 +63,7 @@ There are various ways to setup slider/collage in the blog post or anywhere -
 The cover image is generated randomly. It also changes on a click.
 
 {% include book.html
+   status="active"
    name="Crime and Punishment"
    author="Fyodor Dostoevysky"
    started="January 9, 2024"
@@ -72,10 +73,14 @@ The cover image is generated randomly. It also changes on a click.
    tags="Fiction, Classic Literature, Novel"
    description="Fyodor Dostoevsky's Crime and Punishment is a masterful psychological exploration of guilt and redemption. The novel's protagonist, Raskolnikov, is compelling in his complex moral struggle and descent into madness after committing murder. Dostoevsky's vivid portrayal of 19th-century St. Petersburg adds depth to the narrative. The philosophical dialogues are profound, though occasionally dense. Overall, it's a thought-provoking and intense read that leaves a lasting impact." %}
 
+
+- Make the block visible by setting `status="active"`. You can leave it empty to hide the block.
+
 ```
 {% raw %}
 
 {% include book.html
+   status="active"
    name="Crime and Punishment"
    author="Fyodor Dostoevysky"
    started="January 9, 2024"

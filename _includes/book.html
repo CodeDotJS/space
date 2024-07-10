@@ -1,4 +1,19 @@
-<div class="book-info-card">
+{% comment %}
+  book-info-card.html
+  Include parameters:
+  - name: Book title
+  - author: Book author
+  - url: (optional) Link to book details
+  - started: Start date
+  - finished: Finish date
+  - rating: Book rating (1-5)
+  - progress: (optional) Reading progress percentage
+  - description: (optional) Book description
+  - tags: (optional) Comma-separated list of tags
+  - status: Book status ('active' or empty)
+{% endcomment %}
+
+<div class="book-info-card {% if include.status == 'active' %}status-active{% endif %}">
   <div class="book-header">
     <div class="book-art" id="bookArt-{{ include.name | slugify }}-{{ include.index }}"></div>
     <div class="book-main-details">
