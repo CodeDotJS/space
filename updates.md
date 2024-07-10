@@ -12,3 +12,8 @@ Here you'll find live updates on what I'm currently up to, with real-time data p
 {: .center}
 
 <br>
+
+🚀 Feel free to dive into the *not-so-epic* [Features](../features) of this site! 🌟
+{: .center}
+
+---
