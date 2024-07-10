@@ -1,13 +1,12 @@
-input {
-    text-align: center;
-    width: 50px;
-    border-radius: 5px;
-    border: 2px solid #cec7fa;
-}
-
 .csv-container {
-    font-family: "Inconsolata";
-    overflow-x: auto;
+        font-family: "Inconsolata";
+        overflow-x: auto;
+    input {
+        text-align: center;
+        width: 50px;
+        border-radius: 5px;
+        border: 2px solid #cec7fa;
+    }
 
     .csv-details {
         display: flex;
