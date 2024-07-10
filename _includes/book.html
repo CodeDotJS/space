@@ -1,0 +1,103 @@
+<div class="book-info-card">
+  <div class="book-header">
+    <div class="book-art" id="bookArt-{{ include.name | slugify }}-{{ include.index }}"></div>
+    <div class="book-main-details">
+      <h3>
+        {% if include.url %}
+          <a href="{{ include.url }}" target="_blank">{{ include.name }}</a>
+        {% else %}
+          {{ include.name }}
+        {% endif %}
+      </h3>
+      <p class="author">{{ include.author }}</p>
+      <div class="meta">
+        <span class="dates">{{ include.started }} — {{ include.finished }}</span>
+        <div class="rating">
+          {% assign rating = include.rating | plus: 0 %}
+          {% for i in (1..5) %}
+            {% if i <= rating %}
+              <span class="star filled">★</span>
+            {% else %}
+              <span class="star">☆</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if include.progress %}
+  <div class="progress-bar" title="{{ include.progress }}% completed">
+    <div class="progress" style="width: {{ include.progress }}%;"></div>
+  </div>
+  {% endif %}
+  {% if include.description %}
+  <p class="description">{{ include.description }}</p>
+  {% endif %}
+  {% if include.tags %}
+  <div class="tags">
+    {% assign tag_list = include.tags | split: "," %}
+    {% for tag in tag_list %}
+      <span class="tag">{{ tag | strip }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<script>
+(function() {
+  let bookIndex = 0;
+
+  function generateBookArt(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container || container.querySelector('canvas')) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 60;
+    canvas.height = 60;
+    const ctx = canvas.getContext('2d');
+
+    const colors = [
+      '#3498db', '#e74c3c', '#2ecc71', '#f39c12',
+      '#9b59b6', '#1abc9c', '#34495e', '#e67e22'
+    ];
+
+    function drawPattern() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cellSize = 10;
+      for (let x = 0; x < 6; x++) {
+        for (let y = 0; y < 6; y++) {
+          if (Math.random() > 0.4) {
+            ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }
+
+    drawPattern();
+    container.appendChild(canvas);
+    canvas.addEventListener('click', drawPattern);
+  }
+
+  function initializeBookCards() {
+    document.querySelectorAll('.book-info-card').forEach(card => {
+      const artContainer = card.querySelector('.book-art');
+      if (artContainer && !artContainer.querySelector('canvas')) {
+        bookIndex++;
+        artContainer.id = `${artContainer.id}-${bookIndex}`;
+        generateBookArt(artContainer.id);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeBookCards);
+  } else {
+    initializeBookCards();
+  }
+
+  if (typeof Turbolinks !== 'undefined') {
+    document.addEventListener('turbolinks:load', initializeBookCards);
+  }
+})();
+</script>
