@@ -3,7 +3,8 @@
   background-color: #548cf433;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 50px;
+  max-width: 450px;
+  margin: 40px auto;
 
   &:not(.status-active) {
     display: none;
@@ -90,6 +91,11 @@
     color: #4a4a4a;
     margin: 10px 12px;
     line-height: 1.4;
+
+      img {
+        height: 20px;
+        width: 20px;
+      }
   }
 
   .tags {

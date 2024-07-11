@@ -46,7 +46,10 @@
   </div>
   {% endif %}
   {% if include.description %}
-  <p class="description">{{ include.description }}</p>
+  <p class="description">
+    <img src="{{site.baseurl}}/assets/images/brush.svg" alt="" class="pen">
+    {{ include.description }}
+  </p>
   {% endif %}
   {% if include.tags %}
   <div class="tags">
