@@ -149,3 +149,15 @@ The cover image is generated randomly. It also changes on a click.
 <br>
 
 ---
+
+# Adding Excalidraw
+
+It’s a basic implementation. I need to add a few more things to make it complete. The purpose is very straightforward. Let's see when that happens.
+
+```
+{% raw %}
+{% include excalidraw.html %}
+{% endraw %}
+```
+
+{% include excalidraw.html %}

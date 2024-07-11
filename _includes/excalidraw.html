@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@excalidraw/excalidraw@0.15.2/dist/excalidraw.production.min.js"></script>
+    <style>
+        #excalidraw-container {
+            height: 70vh;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="excalidraw-container"></div>
+
+    <script>
+        const App = () => {
+            return React.createElement(
+                React.Fragment,
+                null,
+                React.createElement(ExcalidrawLib.Excalidraw, {
+                    initialData: { appState: { viewBackgroundColor: "#FFFFFF" } },
+                })
+            );
+        };
+
+        ReactDOM.render(React.createElement(App), document.getElementById("excalidraw-container"));
+    </script>
+</body>
+</html>
