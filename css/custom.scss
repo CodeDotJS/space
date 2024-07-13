@@ -1,3 +1,22 @@
+* {
+    scrollbar-color: #7253ed #ffffff;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width: 4.5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7253ed;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffacff;
+}
+
 .center {
     text-align: center;
 }
