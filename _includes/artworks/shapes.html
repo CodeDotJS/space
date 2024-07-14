@@ -1,0 +1,94 @@
+<style>
+  #pixelArt {
+    margin: 0 auto;
+    width: 256px;
+    height: 256px;
+  }
+</style>
+<div id="pixelArt"></div>
+<script>
+  function generateArt() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+
+    const palette = generatePalette();
+
+    // ctx.fillStyle = '#FFFFFF';
+    // ctx.clearRect(0, 0, 256, 256);
+    // ctx.fillRect(0, 0, 256, 256);
+    // Clear the canvas with a transparent background
+    ctx.clearRect(0, 0, 256, 256);
+
+    drawShapes(ctx, palette);
+
+    document.getElementById('pixelArt').style.backgroundImage = `url(${canvas.toDataURL()})`;
+    document.getElementById('pixelArt').style.backgroundSize = 'contain';
+  }
+
+  function generatePalette() {
+    const baseHue = Math.random() * 360;
+    return [
+      `hsla(${baseHue}, 70%, 50%, 0.8)`,
+      `hsla(${(baseHue + 30) % 360}, 60%, 60%, 0.8)`,
+      `hsla(${(baseHue + 60) % 360}, 50%, 70%, 0.8)`,
+      `hsla(${(baseHue + 180) % 360}, 40%, 30%, 0.8)`,
+      `hsla(${(baseHue + 210) % 360}, 35%, 25%, 0.8)`
+    ];
+  }
+
+  function drawShapes(ctx, palette) {
+    const numShapes = 10 + Math.floor(Math.random() * 15);
+
+    for (let i = 0; i < numShapes; i++) {
+      const shapeType = Math.random();
+      ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+
+      if (shapeType < 0.6) {
+        drawTriangle(ctx);
+      } else if (shapeType < 0.9) {
+        drawPolygon(ctx);
+      } else {
+        drawLine(ctx);
+      }
+    }
+  }
+
+  function drawTriangle(ctx) {
+    ctx.beginPath();
+    for (let i = 0; i < 3; i++) {
+      ctx.lineTo(Math.random() * 256, Math.random() * 256);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawPolygon(ctx) {
+    const sides = 4 + Math.floor(Math.random() * 3);
+    const centerX = Math.random() * 256;
+    const centerY = Math.random() * 256;
+    const radius = 20 + Math.random() * 60;
+
+    ctx.beginPath();
+    for (let i = 0; i < sides; i++) {
+      const angle = (i / sides) * Math.PI * 2;
+      const x = centerX + Math.cos(angle) * radius;
+      const y = centerY + Math.sin(angle) * radius;
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawLine(ctx) {
+    ctx.lineWidth = 1 + Math.random() * 3;
+    ctx.beginPath();
+    ctx.moveTo(Math.random() * 256, Math.random() * 256);
+    ctx.lineTo(Math.random() * 256, Math.random() * 256);
+    ctx.stroke();
+  }
+
+  generateArt();
+  document.getElementById('pixelArt').addEventListener('click', generateArt);
+</script>
