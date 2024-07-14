@@ -10,6 +10,22 @@ This place exists solely to showcase and remember the features of this blog.
 {: .center}
 
 ---
+# Adding Artwork
+
+Instead of header images for the blog post, use random shapes. They also change on either clicking on the canvas or resizing the window.
+
+{% include artworks/resize.html %}
+
+```
+{% raw %}
+{% include artworks/resize.html %}
+{% endraw %}
+```
+{: .center}
+
+---
+
+<br>
 
 # Adding CSV
 
