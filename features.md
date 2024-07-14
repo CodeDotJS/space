@@ -12,16 +12,21 @@ This place exists solely to showcase and remember the features of this blog.
 ---
 # Adding Artwork
 
-Instead of header images for the blog post, use random shapes. They also change on either clicking on the canvas or resizing the window.
+Instead of using header images for the blog posts, use random shapes. These shapes change either when the canvas is clicked or the window is resized. Additionally, the grid size can be easily adjusted to make the shapes bigger or smaller. By default, the grid size is set to 5.
 
-{% include artworks/resize.html %}
+{% include artworks/resize.html size=5 %}
+
+The height is customizable, too ---
+
+{% include artworks/resize.html size=10 height=100 %}
 
 ```
 {% raw %}
-{% include artworks/resize.html %}
+1. {% include artworks/resize.html %}
+2. {% include artworks/resize.html size=10 %}
+3. {% include artworks/resize.html size=10 height=100 %}
 {% endraw %}
-```
-{: .center}
+````
 
 ---
 
