@@ -3,8 +3,8 @@
 // Function to generate a random pastel color
 @function random-pastel() {
   $hue: random(360);
-  $saturation: 5% + random(10 / 1%) * 1%; // Lower saturation range
-  $lightness: 40% + random(20 / 1%) * 1%; // Lightness around 40% to 60%
+  $saturation: 5% + random(math.div(10%, 1%)) * 1%;
+  $lightness: 40% + random(math.div(20%, 1%)) * 1%;
   @return hsl($hue, $saturation, $lightness);
 }
 
