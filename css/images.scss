@@ -1,8 +1,10 @@
+@use 'sass:math';
+
 // Function to generate a random pastel color
 @function random-pastel() {
   $hue: random(360);
-  $saturation: 50% + random(30%);
-  $lightness: 10% + random(20%);
+  $saturation: 5% + random(10 / 1%) * 1%; // Lower saturation range
+  $lightness: 40% + random(20 / 1%) * 1%; // Lightness around 40% to 60%
   @return hsl($hue, $saturation, $lightness);
 }
 
@@ -43,6 +45,7 @@
     text-decoration: 2px underline;
     font-style: italic;
     width: 100%;
+    margin-top: 15px;
   }
 }
 
@@ -50,6 +53,7 @@
   .frag {
     .image-wrapper {
       padding: 15px;
+      margin-bottom: -20px;
     }
   }
 }
