@@ -1,0 +1,14 @@
+<figure class="frag {% if include.center %}center{% endif %}">
+  {% assign files = include.file | split: ' ' %}
+  {% for file in files %}
+    <div class="image-wrapper" style="width: {{ include.width }};">
+      <img
+        src="{{ site.baseurl }}/assets/images/{{ file }}"
+        alt="{{ include.alt | default: 'Image' }}"
+      >
+    </div>
+  {% endfor %}
+  {% if include.caption %}
+    <figcaption>{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>

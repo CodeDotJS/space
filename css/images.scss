@@ -1,0 +1,65 @@
+// Function to generate a random pastel color
+@function random-pastel() {
+  $hue: random(360);
+  $saturation: 50% + random(30%);
+  $lightness: 10% + random(20%);
+  @return hsl($hue, $saturation, $lightness);
+}
+
+// Mixin for creating a multi-colored border
+@mixin pastel-border($width: 3px, $segments: 3) {
+  $colors: ();
+  @for $i from 1 through $segments {
+    $colors: append($colors, random-pastel(), comma);
+  }
+
+  border-width: $width;
+  border-style: solid;
+  border-image: linear-gradient(to right, $colors) 1;
+}
+
+.frag {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &.center {
+    text-align: center;
+  }
+
+  .image-wrapper {
+    padding: 20px;
+
+    img {
+      @include pastel-border(3px, 5);
+      max-width: 100%;
+      display: block;
+      padding: 8px;
+    }
+  }
+
+  figcaption {
+    text-align: center;
+    text-decoration: 2px underline;
+    font-style: italic;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .frag .image-wrapper {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .frag .image-wrapper {
+    width: calc(50% - 10px);
+  }
+}
+
+@media (min-width: 1025px) {
+  .frag .image-wrapper {
+    width: calc(33.33% - 10px);
+  }
+}

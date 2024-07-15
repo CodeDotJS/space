@@ -28,9 +28,9 @@ The height is customizable, too ---
 {% endraw %}
 ````
 
----
-
 <br>
+
+---
 
 # Adding CSV
 
@@ -74,6 +74,27 @@ There are various ways to setup slider/collage in the blog post or anywhere -
 - The first option lets you show all the image of the folder "June" of `assets/images/June`
 - Through second option, you can choose which images you have to show.
 - If you wish to include a range of images, you can specific it. Index starts at zero.
+
+<br>
+
+---
+
+# Adding Image
+
+{% include images.html file="griffin.png brush.svg sleeping-cat.png sis.gif" alt="A cute cat" caption="Therefore!" center=true width="35%" %}
+
+```
+{% raw %}
+{% include images.html
+   file="griffin.png brush.svg sleeping-cat.png sis.gif"
+   alt="A cute cat"
+   caption="Therefore!"
+   center=true
+   width="50%" %}
+{% endraw %}
+```
+
+Root folder is set to `{% raw %}{{site.baseurl}}/assets/images/{% endraw %}`.
 
 <br>
 
@@ -160,7 +181,7 @@ The cover image is generated randomly. It also changes on a click.
 ```yaml
 - image: "meow.png or https://meow.com/meow.png"
   title: "Meow Meow"
-  description: "A collection meows"
+  description: "A collection of meows"
   blog: "2024-06-28-cool-meow"
   preview: "https://meowproject.org"
 ```
@@ -171,14 +192,3 @@ The cover image is generated randomly. It also changes on a click.
 
 ---
 
-# Adding Excalidraw
-
-It’s a basic implementation. I need to add a few more things to make it complete. The purpose is very straightforward. Let's see when that happens.
-
-```
-{% raw %}
-{% include excalidraw.html %}
-{% endraw %}
-```
-
-{% include excalidraw.html %}
