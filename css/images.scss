@@ -46,20 +46,10 @@
   }
 }
 
-@media (max-width: 768px) {
-  .frag .image-wrapper {
-    width: 100%;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .frag .image-wrapper {
-    width: calc(50% - 10px);
-  }
-}
-
-@media (min-width: 1025px) {
-  .frag .image-wrapper {
-    width: calc(33.33% - 10px);
+@media (min-width: 310px) {
+  .frag {
+    .image-wrapper {
+      padding: 15px;
+    }
   }
 }
