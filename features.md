@@ -25,6 +25,7 @@ The height is customizable, too ---
 1. {% include artworks/resize.html %}
 2. {% include artworks/resize.html size=10 %}
 3. {% include artworks/resize.html size=10 height=100 %}
+4. {% include artworks/resize.html size=10 height=100 animate=true %}
 {% endraw %}
 ````
 
