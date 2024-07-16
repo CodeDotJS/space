@@ -1,10 +1,14 @@
 @use 'sass:math';
 
+@function random-number($max) {
+  @return math.round($max * math.random());
+}
+
 // Function to generate a random pastel color
 @function random-pastel() {
-  $hue: random(360);
-  $saturation: 5% + random(math.div(10%, 1%)) * 1%;
-  $lightness: 40% + random(math.div(20%, 1%)) * 1%;
+  $hue: random-number(360);
+  $saturation: 5% + random-number(10) * 1%;
+  $lightness: 40% + random-number(20) * 1%;
   @return hsl($hue, $saturation, $lightness);
 }
 
