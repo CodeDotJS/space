@@ -1,0 +1,128 @@
+<style>
+  .pixelArt {
+    margin: 0 auto;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+</style>
+<div class="pixelArt" data-grid-size="{{ include.size | default: 5 }}" data-height="{{ include.height | default: 256 }}"></div>
+<script>
+  (function() {
+    function generateUniqueId() {
+      return 'pixelArt_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    function generateArt(containerId) {
+      const container = document.getElementById(containerId);
+      const canvas = document.createElement('canvas');
+      canvas.width = container.offsetWidth;
+      canvas.height = parseInt(container.dataset.height) || 256;
+      container.style.height = canvas.height + 'px';
+      const ctx = canvas.getContext('2d');
+      const GRID_SIZE = parseInt(container.dataset.gridSize) || 5;
+
+      const palette = generatePalette();
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawShapes(ctx, palette, canvas.width, canvas.height, GRID_SIZE);
+
+      container.style.backgroundImage = `url(${canvas.toDataURL()})`;
+    }
+
+    function generatePalette() {
+      const baseHue = Math.random() * 360;
+      return [
+        `hsla(${baseHue}, 10%, 50%, 0.8)`,
+        `hsla(${(baseHue + 30) % 360}, 60%, 60%, 0.8)`,
+        `hsla(${(baseHue + 60) % 360}, 50%, 70%, 0.8)`,
+        `hsla(${(baseHue + 180) % 360}, 40%, 30%, 0.8)`,
+        `hsla(${(baseHue + 210) % 360}, 35%, 25%, 0.8)`
+      ];
+    }
+
+    function drawShapes(ctx, palette, width, height, GRID_SIZE) {
+      const gridWidth = Math.floor(width / GRID_SIZE);
+      const gridHeight = Math.floor(height / GRID_SIZE);
+
+      for (let x = 0; x < gridWidth; x++) {
+        for (let y = 0; y < gridHeight; y++) {
+          if (Math.random() < 0.7) {
+            const shapeType = Math.random();
+            ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+
+            const cellX = x * GRID_SIZE;
+            const cellY = y * GRID_SIZE;
+
+            if (shapeType < 0.25) {
+              drawTriangle(ctx, cellX, cellY, GRID_SIZE);
+            } else if (shapeType < 0.5) {
+              drawCircle(ctx, cellX, cellY, GRID_SIZE);
+            } else if (shapeType < 0.75) {
+              drawSquare(ctx, cellX, cellY, GRID_SIZE);
+            } else {
+              drawStar(ctx, cellX, cellY, GRID_SIZE);
+            }
+          }
+        }
+      }
+    }
+
+    function drawTriangle(ctx, x, y, GRID_SIZE) {
+      const size = GRID_SIZE * 0.8;
+      ctx.beginPath();
+      ctx.moveTo(x + GRID_SIZE / 2, y);
+      ctx.lineTo(x, y + size);
+      ctx.lineTo(x + size, y + size);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawCircle(ctx, x, y, GRID_SIZE) {
+      const radius = GRID_SIZE * 0.4;
+      ctx.beginPath();
+      ctx.arc(x + GRID_SIZE / 2, y + GRID_SIZE / 2, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawSquare(ctx, x, y, GRID_SIZE) {
+      const size = GRID_SIZE * 0.8;
+      ctx.fillRect(x + GRID_SIZE * 0.1, y + GRID_SIZE * 0.1, size, size);
+    }
+
+    function drawStar(ctx, x, y, GRID_SIZE) {
+      const outerRadius = GRID_SIZE * 0.4;
+      const innerRadius = outerRadius * 0.5;
+      const centerX = x + GRID_SIZE / 2;
+      const centerY = y + GRID_SIZE / 2;
+      const spikes = 5;
+
+      ctx.beginPath();
+      for (let i = 0; i < spikes * 2; i++) {
+        const radius = i % 2 === 0 ? outerRadius : innerRadius;
+        const angle = (i * Math.PI) / spikes;
+        ctx.lineTo(
+          centerX + Math.cos(angle) * radius,
+          centerY + Math.sin(angle) * radius
+        );
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    document.querySelectorAll('.pixelArt').forEach(container => {
+      const uniqueId = generateUniqueId();
+      container.id = uniqueId;
+      generateArt(uniqueId);
+      container.addEventListener('click', () => generateArt(uniqueId));
+    });
+
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.pixelArt').forEach(container => {
+        generateArt(container.id);
+      });
+    });
+  })();
+</script>
