@@ -1,5 +1,5 @@
 <style>
-  .pixelArt {
+  .shapeArt {
     margin: 0 auto;
     width: 256px;
     height: 256px;
@@ -8,11 +8,11 @@
     background-position: center;
   }
 </style>
-<div class="pixelArt" data-style="{{ include.style | default: 'abstract' }}" data-color="{{ include.color | default: 'random' }}" data-density="{{ include.density | default: 'medium' }}"></div>
+<div class="shapeArt" data-style="{{ include.style | default: 'abstract' }}" data-color="{{ include.color | default: 'random' }}" data-density="{{ include.density | default: 'medium' }}"></div>
 <script>
   (function() {
     function generateUniqueId() {
-      return 'pixelArt_' + Math.random().toString(36).substr(2, 9);
+      return 'shapeArt_' + Math.random().toString(36).substr(2, 9);
     }
 
     function generateArt(container) {
@@ -195,7 +195,7 @@
       ctx.stroke();
     }
 
-    document.querySelectorAll('.pixelArt').forEach(container => {
+    document.querySelectorAll('.shapeArt').forEach(container => {
       const uniqueId = generateUniqueId();
       container.id = uniqueId;
       generateArt(container);
