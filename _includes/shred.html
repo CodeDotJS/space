@@ -1,0 +1,102 @@
+<style>
+     #shredder-container {
+        height: 150px;
+        width: 150px;
+        margin: 0 auto;
+        --s: 10px;
+        border: calc(2*var(--s)) solid #0000;
+        outline: 1px solid #000;
+        outline-offset: calc(-1*var(--s));
+        background: conic-gradient(from 90deg at 1px 1px,#0000 25%,#000 0);
+     }
+</style>
+<div id="shredder-container"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+    const container = document.getElementById('shredder-container');
+    let scene, camera, renderer, geometry, material, mesh;
+    let isHovered = false;
+    let animationProgress = 0;
+    let texture1, texture2;
+
+    const image1 = "{{ include.image1 }}";
+    const image2 = "{{ include.image2 }}";
+    const effect = "{{ include.effect }}";
+
+    function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        geometry = new THREE.PlaneGeometry(5, 5, 64, 64);
+
+        // Three.js TextureLoader works with both local paths and URLs
+        texture1 = new THREE.TextureLoader().load(image1);
+        texture2 = new THREE.TextureLoader().load(image2);
+        material = new THREE.MeshBasicMaterial({ map: texture1, side: THREE.DoubleSide });
+
+        mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        camera.position.z = 5;
+
+        container.addEventListener('mouseenter', () => isHovered = true);
+        container.addEventListener('mouseleave', () => isHovered = false);
+
+        animate();
+    }
+
+    function applyEffect(progress) {
+        const positions = geometry.attributes.position.array;
+        const originalPositions = geometry.attributes.position.clone().array;
+
+        switch(effect) {
+            case 'wave':
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i + 2] = Math.sin(originalPositions[i] * 2 + progress * 10) * progress;
+                }
+                break;
+            case 'spiral':
+                for (let i = 0; i < positions.length; i += 3) {
+                    const x = originalPositions[i];
+                    const y = originalPositions[i + 1];
+                    const distance = Math.sqrt(x * x + y * y);
+                    const angle = Math.atan2(y, x) + progress * 5 * distance;
+                    positions[i] = distance * Math.cos(angle);
+                    positions[i + 1] = distance * Math.sin(angle);
+                }
+                break;
+            case 'shred':
+            default:
+                for (let i = 0; i < positions.length; i += 3) {
+                    const randomOffset = Math.random() * 2 - 1;
+                    positions[i + 2] = randomOffset * progress;
+                }
+        }
+        geometry.attributes.position.needsUpdate = true;
+    }
+
+    function updateAnimation() {
+        const targetProgress = isHovered ? 1 : 0;
+        animationProgress += (targetProgress - animationProgress) * 0.1;
+
+        applyEffect(animationProgress);
+
+        material.map = isHovered ? texture2 : texture1;
+        material.opacity = isHovered ? animationProgress : 1 - animationProgress;
+        material.transparent = true;
+        material.needsUpdate = true;
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        updateAnimation();
+        renderer.render(scene, camera);
+    }
+
+    init();
+})();
+</script>
