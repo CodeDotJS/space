@@ -1,4 +1,24 @@
-<div class="artcontainer">
+### <span class="highlight-black">Intersection: Art Meets Neurophilosophy</span>
+{: .center}
+
+This artwork isn't just a mirror of our minds; it's a dynamic representation of how thoughts, words, and perceptions interact.
+
+- __Making Sense of Chaos__: Random shapes and flowing connections mimic how our brains create meaning from the chaos of sensory input.
+- __Thoughts Come and Go__: With a click, you create new art. This reflects the Buddhist idea of [impermanence](https://www.wikiwand.com/en/Impermanence) --- *anicca*. Each version is unique and fleeting, just like our thoughts and experiences.
+- __Linguistic Relativity__: Voice input changing shape sizes demonstrates the [Sapir-Whorf hypothesis](https://www.wikiwand.com/en/Linguistic_relativity) in a visual medium:
+    - Brief utterances creating small shapes represent simple perceptions.
+    - Medium-length phrases generating standard shapes symbolize routine thinking processes.
+    - Longer sentences producing larger shapes display strong emotional states.
+
+This feature shows how the structure of our language can shape our thinking and perception.
+
+- __Cognitive Coherence Visualization__: The flowing lines trying to connect shapes represent the mind’s constant effort to create stories and connections, trying to mirror our tendency to create sensible mental models, even with incomplete or conflicting information.
+- __Order-Chaos Duality__: The mix of random generation and systematic connection shows the basic tension between [entropy](https://www.wikiwand.com/en/Entropy) and organization. This duality is mirrored in our consciousness, which constantly seeks to impose order on the chaos of sensory input.
+
+The interaction serves as a dynamic model of how our minds construct reality, highlighting the role of randomness, connection-seeking, and the power of expression in shaping our conscious experience.
+
+
+<div class="artcontainer frame">
     <canvas id="myCanvas"></canvas>
     <div class="speechContainer">
         <div id="support"></div>
@@ -7,7 +27,6 @@
         </div>
     </div>
 </div>
-
 <script>
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
@@ -47,14 +66,14 @@ function generateArt() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw random shapes and patterns
-    const numShapes = 20 + Math.floor(Math.random() * 10); // Random number of shapes
+    const numShapes = 20 + Math.floor(Math.random() * 20); // Random number of shapes
     shapes = []; // Clear existing shapes
 
     for (let i = 0; i < numShapes; i++) {
         shapes.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: (30 + Math.random() * 10) * volume * (canvas.width / 600),
+            size: (20 + Math.random() * 20) * volume * (canvas.width / 600),
             color: getRandomColor(),
             isCircle: Math.random() < 0.5
         });
@@ -90,7 +109,7 @@ function generateFlowingLines() {
             let currentPoint = { x: shape.x, y: shape.y };
             let path = [currentPoint];
             let steps = 0;
-            let maxSteps = 100 + Math.random() * 100;
+            let maxSteps = 50 + Math.random() * 500;
 
             while (steps < maxSteps) {
                 let nearestShape = findNearestShape(currentPoint, path);
@@ -148,7 +167,7 @@ function animateFlowingLines() {
     flowingLines.forEach(line => {
         ctx.beginPath();
         ctx.strokeStyle = line.color;
-        ctx.lineWidth = 2 * volume * (canvas.width / 600);
+        ctx.lineWidth = 1 * volume * (canvas.width / 600);
 
         for (let i = 0; i < Math.floor(line.progress); i++) {
             if (i === 0) {
@@ -173,11 +192,12 @@ function animateFlowingLines() {
 
 // Function to get a random color
 function getRandomColor() {
-    const r = Math.floor(Math.random() * 250);
-    const g = Math.floor(Math.random() * 250);
-    const b = Math.floor(Math.random() * 250);
+    const r = Math.floor(Math.random() * 200) + 10;
+    const g = Math.floor(Math.random() * 80) + 50;
+    const b = Math.floor(Math.random() * 150) + 50;
     return `rgb(${r},${g},${b})`;
 }
+
 
 // Function to handle voice input
 function handleVoiceInput() {
