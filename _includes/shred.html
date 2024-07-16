@@ -32,8 +32,6 @@
         container.appendChild(renderer.domElement);
 
         geometry = new THREE.PlaneGeometry(5, 5, 64, 64);
-
-        // Three.js TextureLoader works with both local paths and URLs
         texture1 = new THREE.TextureLoader().load(image1);
         texture2 = new THREE.TextureLoader().load(image2);
         material = new THREE.MeshBasicMaterial({ map: texture1, side: THREE.DoubleSide });
