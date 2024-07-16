@@ -1,128 +1,186 @@
 <style>
-  .pixelArt {
+.pixelArt {
     margin: 0 auto;
     width: 100%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-  }
+    cursor: pointer;
+}
 </style>
-<div class="pixelArt" data-grid-size="{{ include.size | default: 5 }}" data-height="{{ include.height | default: 256 }}"></div>
+<div class="pixelArt" data-grid-size="{{ include.size | default: 5 }}" data-height="{{ include.height | default: 256 }}" data-animate="{{ include.animate }}"></div>
 <script>
   (function() {
     function generateUniqueId() {
-      return 'pixelArt_' + Math.random().toString(36).substr(2, 9);
+        return 'pixelArt_' + Math.random().toString(36).substr(2, 9);
     }
 
     function generateArt(containerId) {
-      const container = document.getElementById(containerId);
-      const canvas = document.createElement('canvas');
-      canvas.width = container.offsetWidth;
-      canvas.height = parseInt(container.dataset.height) || 256;
-      container.style.height = canvas.height + 'px';
-      const ctx = canvas.getContext('2d');
-      const GRID_SIZE = parseInt(container.dataset.gridSize) || 5;
+        const container = document.getElementById(containerId);
+        let canvas = container.querySelector('canvas');
 
-      const palette = generatePalette();
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            container.appendChild(canvas);
+        }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = container.offsetWidth;
+        canvas.height = parseInt(container.dataset.height) || 256;
+        container.style.height = canvas.height + 'px';
+        const ctx = canvas.getContext('2d');
+        const GRID_SIZE = parseInt(container.dataset.gridSize) || 5;
+        const animate = container.dataset.animate === 'true';
 
-      drawShapes(ctx, palette, canvas.width, canvas.height, GRID_SIZE);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      container.style.backgroundImage = `url(${canvas.toDataURL()})`;
+        const palette = generatePalette();
+        const shapes = [];
+
+        drawShapes(ctx, palette, canvas.width, canvas.height, GRID_SIZE, shapes);
+
+        if (animate) {
+            animateShapes(ctx, shapes, canvas.width, canvas.height, GRID_SIZE);
+        } else {
+            container.style.backgroundImage = `url(${canvas.toDataURL()})`;
+        }
     }
 
     function generatePalette() {
-      const baseHue = Math.random() * 360;
-      return [
-        `hsla(${baseHue}, 10%, 50%, 0.8)`,
-        `hsla(${(baseHue + 30) % 360}, 60%, 60%, 0.8)`,
-        `hsla(${(baseHue + 60) % 360}, 50%, 70%, 0.8)`,
-        `hsla(${(baseHue + 180) % 360}, 40%, 30%, 0.8)`,
-        `hsla(${(baseHue + 210) % 360}, 35%, 25%, 0.8)`
-      ];
+        const baseHue = Math.random() * 360;
+        return [
+            `hsla(${baseHue}, 10%, 50%, 0.8)`,
+            `hsla(${(baseHue + 30) % 360}, 60%, 60%, 0.8)`,
+            `hsla(${(baseHue + 60) % 360}, 50%, 70%, 0.8)`,
+            `hsla(${(baseHue + 180) % 360}, 40%, 30%, 0.8)`,
+            `hsla(${(baseHue + 210) % 360}, 35%, 25%, 0.8)`
+        ];
     }
 
-    function drawShapes(ctx, palette, width, height, GRID_SIZE) {
-      const gridWidth = Math.floor(width / GRID_SIZE);
-      const gridHeight = Math.floor(height / GRID_SIZE);
+    function drawShapes(ctx, palette, width, height, GRID_SIZE, shapes) {
+        const gridWidth = Math.floor(width / GRID_SIZE);
+        const gridHeight = Math.floor(height / GRID_SIZE);
 
-      for (let x = 0; x < gridWidth; x++) {
-        for (let y = 0; y < gridHeight; y++) {
-          if (Math.random() < 0.7) {
-            const shapeType = Math.random();
-            ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
+        for (let x = 0; x < gridWidth; x++) {
+            for (let y = 0; y < gridHeight; y++) {
+                if (Math.random() < 0.7) {
+                    const shapeType = Math.random();
+                    const color = palette[Math.floor(Math.random() * palette.length)];
 
-            const cellX = x * GRID_SIZE;
-            const cellY = y * GRID_SIZE;
+                    const cellX = x * GRID_SIZE;
+                    const cellY = y * GRID_SIZE;
 
-            if (shapeType < 0.25) {
-              drawTriangle(ctx, cellX, cellY, GRID_SIZE);
-            } else if (shapeType < 0.5) {
-              drawCircle(ctx, cellX, cellY, GRID_SIZE);
-            } else if (shapeType < 0.75) {
-              drawSquare(ctx, cellX, cellY, GRID_SIZE);
-            } else {
-              drawStar(ctx, cellX, cellY, GRID_SIZE);
+                    let drawFunction;
+                    if (shapeType < 0.25) {
+                        drawFunction = drawTriangle;
+                    } else if (shapeType < 0.5) {
+                        drawFunction = drawCircle;
+                    } else if (shapeType < 0.75) {
+                        drawFunction = drawSquare;
+                    } else {
+                        drawFunction = drawStar;
+                    }
+
+                    shapes.push({ x: cellX, y: cellY, color, drawFunction, rotation: 0, scale: 1 });
+                    drawFunction(ctx, cellX, cellY, GRID_SIZE, color, 0, 1);
+                }
             }
-          }
         }
-      }
     }
 
-    function drawTriangle(ctx, x, y, GRID_SIZE) {
-      const size = GRID_SIZE * 0.8;
-      ctx.beginPath();
-      ctx.moveTo(x + GRID_SIZE / 2, y);
-      ctx.lineTo(x, y + size);
-      ctx.lineTo(x + size, y + size);
-      ctx.closePath();
-      ctx.fill();
+    function drawTriangle(ctx, x, y, GRID_SIZE, color, rotation, scale) {
+        const size = GRID_SIZE * 0.8 * scale;
+        ctx.fillStyle = color;
+        ctx.save();
+        ctx.translate(x + GRID_SIZE / 2, y + GRID_SIZE / 2);
+        ctx.rotate(rotation);
+        ctx.beginPath();
+        ctx.moveTo(0, -size / 2);
+        ctx.lineTo(-size / 2, size / 2);
+        ctx.lineTo(size / 2, size / 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
     }
 
-    function drawCircle(ctx, x, y, GRID_SIZE) {
-      const radius = GRID_SIZE * 0.4;
-      ctx.beginPath();
-      ctx.arc(x + GRID_SIZE / 2, y + GRID_SIZE / 2, radius, 0, Math.PI * 2);
-      ctx.fill();
+    function drawCircle(ctx, x, y, GRID_SIZE, color, rotation, scale) {
+        const radius = GRID_SIZE * 0.4 * scale;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x + GRID_SIZE / 2, y + GRID_SIZE / 2, radius, 0, Math.PI * 2);
+        ctx.fill();
     }
 
-    function drawSquare(ctx, x, y, GRID_SIZE) {
-      const size = GRID_SIZE * 0.8;
-      ctx.fillRect(x + GRID_SIZE * 0.1, y + GRID_SIZE * 0.1, size, size);
+    function drawSquare(ctx, x, y, GRID_SIZE, color, rotation, scale) {
+        const size = GRID_SIZE * 0.8 * scale;
+        ctx.fillStyle = color;
+        ctx.save();
+        ctx.translate(x + GRID_SIZE / 2, y + GRID_SIZE / 2);
+        ctx.rotate(rotation);
+        ctx.fillRect(-size / 2, -size / 2, size, size);
+        ctx.restore();
     }
 
-    function drawStar(ctx, x, y, GRID_SIZE) {
-      const outerRadius = GRID_SIZE * 0.4;
-      const innerRadius = outerRadius * 0.5;
-      const centerX = x + GRID_SIZE / 2;
-      const centerY = y + GRID_SIZE / 2;
-      const spikes = 5;
+    function drawStar(ctx, x, y, GRID_SIZE, color, rotation, scale) {
+        const outerRadius = GRID_SIZE * 0.4 * scale;
+        const innerRadius = outerRadius * 0.5;
+        const spikes = 5;
 
-      ctx.beginPath();
-      for (let i = 0; i < spikes * 2; i++) {
-        const radius = i % 2 === 0 ? outerRadius : innerRadius;
-        const angle = (i * Math.PI) / spikes;
-        ctx.lineTo(
-          centerX + Math.cos(angle) * radius,
-          centerY + Math.sin(angle) * radius
-        );
-      }
-      ctx.closePath();
-      ctx.fill();
+        ctx.fillStyle = color;
+        ctx.save();
+        ctx.translate(x + GRID_SIZE / 2, y + GRID_SIZE / 2);
+        ctx.rotate(rotation);
+        ctx.beginPath();
+        for (let i = 0; i < spikes * 2; i++) {
+            const radius = i % 2 === 0 ? outerRadius : innerRadius;
+            const angle = (i * Math.PI) / spikes;
+            ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function animateShapes(ctx, shapes, width, height, GRID_SIZE) {
+        let time = 0;
+
+        function animate() {
+            time += 0.05;
+            ctx.clearRect(0, 0, width, height);
+
+            shapes.forEach((shape, index) => {
+                const wave = Math.cos(time + index ** 0.01) * 0.1 + 0.1;
+                const scale = 0.8 + wave * 0.9;
+                const rotation = time * (index % 2 === 0 ? 1 : -1);
+
+                shape.x += Math.atan(time + index) * 0.1;
+                shape.y += Math.cos(time + index * 0.7) * 0.5;
+
+                shape.x = (shape.x + width) % width;
+                shape.y = (shape.y + height) % height;
+
+                shape.drawFunction(ctx, shape.x, shape.y, GRID_SIZE, shape.color, rotation, scale);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     }
 
     document.querySelectorAll('.pixelArt').forEach(container => {
-      const uniqueId = generateUniqueId();
-      container.id = uniqueId;
-      generateArt(uniqueId);
-      container.addEventListener('click', () => generateArt(uniqueId));
+        const uniqueId = generateUniqueId();
+        container.id = uniqueId;
+        generateArt(uniqueId);
+
+        if (container.dataset.animate !== 'true') {
+            container.addEventListener('click', () => generateArt(uniqueId));
+        }
     });
 
     window.addEventListener('resize', () => {
-      document.querySelectorAll('.pixelArt').forEach(container => {
-        generateArt(container.id);
-      });
+        document.querySelectorAll('.pixelArt').forEach(container => {
+            generateArt(container.id);
+        });
     });
-  })();
+})();
 </script>
