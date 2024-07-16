@@ -27,8 +27,11 @@ This page deals with Experimental Satire, combining offbeat and creative approac
 
 ---
 
+
 {% include artworks/resize.html size=7 height=70 animate=true %}
 
 ---
+
+{% include shred.html image1="../assets/images/random/smiling-monkey.png" image2="../assets/images/random/rick-roll.png" effect="shred" %}
 
 {% include artworks/connections.html %}
