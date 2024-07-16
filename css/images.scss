@@ -1,29 +1,3 @@
-@use 'sass:math';
-
-@function random-number($max) {
-  @return math.round($max * math.random());
-}
-
-// Function to generate a random pastel color
-@function random-pastel() {
-  $hue: random-number(360);
-  $saturation: 5% + random-number(10) * 1%;
-  $lightness: 40% + random-number(20) * 1%;
-  @return hsl($hue, $saturation, $lightness);
-}
-
-// Mixin for creating a multi-colored border
-@mixin pastel-border($width: 3px, $segments: 3) {
-  $colors: ();
-  @for $i from 1 through $segments {
-    $colors: append($colors, random-pastel(), comma);
-  }
-
-  border-width: $width;
-  border-style: solid;
-  border-image: linear-gradient(to right, $colors) 1;
-}
-
 .frag {
   display: flex;
   flex-wrap: wrap;
@@ -37,7 +11,7 @@
     padding: 20px;
 
     img {
-      @include pastel-border(3px, 5);
+      border: 3px solid;
       max-width: 100%;
       display: block;
       padding: 8px;
