@@ -11,7 +11,9 @@ title: Artography
 This page deals with Experimental Satire, combining offbeat and creative approaches with humor to critique and explore current state of artworks. By stepping outside the norms of traditional satire, it makes an attempt to provoke thought through *unique* methods.
 {: .center}
 
-<center>🦄</center>
+<!-- <center>🦄</center> -->
+
+{% include shred.html image1="../assets/images/random/smiling-monkey.png" image2="../assets/images/random/rick-roll.png" effect="shred" %}
 
 > All the lofty descriptions of the artwork were concocted later. During their creation, I simply followed what felt cool. Now, to make myself sound profound and relevant, I'm unnecessarily elaborating on something that once had no meaning.
 
@@ -31,7 +33,5 @@ This page deals with Experimental Satire, combining offbeat and creative approac
 {% include artworks/resize.html size=7 height=70 animate=true %}
 
 ---
-
-{% include shred.html image1="../assets/images/random/smiling-monkey.png" image2="../assets/images/random/rick-roll.png" effect="shred" %}
 
 {% include artworks/connections.html %}
