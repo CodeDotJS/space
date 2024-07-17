@@ -1,9 +1,7 @@
 ---
 layout: default
 ---
-
 {{content}}
-
 {% include commit.html %}
 {% include spotify.html %}
 {% include goodreads.html %}
@@ -12,7 +10,6 @@ layout: default
 {% include pocket.html %}
 {% include words.html %}
 {% include quote.html %}
-
 <div class="update-page">
     <div class="grid-row">
         <div class="card card-blue">
@@ -69,19 +66,19 @@ layout: default
             <div class="content-item">
                 <a id="article-link">
                     <img src="https://www.svgrepo.com/show/530146/read.svg" alt="Article Icon">
-                    <span id="article-title"><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt=""></span>
+                    <span id="article-title"><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt="Loading..." class="loader"></span>
                 </a>
                 <blockquote class="excerpt" id="article-excerpt"></blockquote>
             </div>
         </div>
         <div class="card card-green">
-            <h3>Video I Enjoyed</h3>
+            <h3>Videos I Enjoyed</h3>
             <div class="content-item">
-                <a id="video-link">
-                    <img src="https://www.svgrepo.com/show/503860/video-center.svg" alt="Video Icon">
-                    <span id="video-title"><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt=""></span>
-                </a>
-                <blockquote class="excerpt" id="video-excerpt"></blockquote>
+                <ul id="video-list">
+                    <li><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt="Loading..." class="loader"></li>
+                    <li><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt="Loading..." class="loader"></li>
+                    <li><img src="https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-smil/pulse-rings-3.svg" alt="Loading..." class="loader"></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -96,7 +93,7 @@ layout: default
             <h3>Quote I Liked</h3>
             <div class="goodquotes">
                 <!-- <div class="quote-image"> -->
-                    <!-- <img id="author-image" src="" alt="Author Image"> -->
+                <!-- <img id="author-image" src="" alt="Author Image"> -->
                 <!-- </div> -->
                 <div class="quote-content">
                     <p id="quote-text" class="quote-text"></p>
