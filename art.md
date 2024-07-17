@@ -13,7 +13,7 @@ This page deals with Experimental Satire, combining offbeat and creative approac
 
 <!-- <center>🦄</center> -->
 
-{% include shred.html image1="../assets/images/random/smiling-monkey.png" image2="../assets/images/random/rick-roll.png" effect="shred" %}
+{% include shred.html image1="../assets/images/random/smiling-monkey.png" image2="../assets/images/random/rick-roll.png" effect="shred" play="../assets/images/random/rickrolled.mp3" %}
 
 > All the lofty descriptions of the artwork were concocted later. During their creation, I simply followed what felt cool. Now, to make myself sound profound and relevant, I'm unnecessarily elaborating on something that once had no meaning.
 
