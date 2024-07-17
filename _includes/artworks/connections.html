@@ -167,7 +167,7 @@ function animateFlowingLines() {
     flowingLines.forEach(line => {
         ctx.beginPath();
         ctx.strokeStyle = line.color;
-        ctx.lineWidth = 1 * volume * (canvas.width / 600);
+        ctx.lineWidth = 2 * volume * (canvas.width / 600);
 
         for (let i = 0; i < Math.floor(line.progress); i++) {
             if (i === 0) {
@@ -262,7 +262,7 @@ function toggleVoiceRecognition() {
     }
 }
 
-window.addEventListener('resize', setCanvasSize);
+// window.addEventListener('resize', setCanvasSize);
 canvas.addEventListener('click', generateArt);
 document.getElementById('voiceControlButton').addEventListener('click', toggleVoiceRecognition);
 
