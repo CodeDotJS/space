@@ -6,3 +6,4 @@ _site/
 .bundle/
 vendor/
 _drafts
+_config_dev.yml
