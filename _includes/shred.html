@@ -16,9 +16,10 @@
 (function() {
     const container = document.getElementById('shredder-container');
     let scene, camera, renderer, geometry, material, mesh;
-    let isHovered = false;
+    let isActive = false;
     let animationProgress = 0;
     let texture1, texture2;
+    let isMobile = false;
 
     const image1 = "{{ include.image1 }}";
     const image2 = "{{ include.image2 }}";
@@ -32,8 +33,12 @@
         container.appendChild(renderer.domElement);
 
         geometry = new THREE.PlaneGeometry(5, 5, 64, 64);
-        texture1 = new THREE.TextureLoader().load(image1);
-        texture2 = new THREE.TextureLoader().load(image2);
+
+        const loader = new THREE.TextureLoader();
+        loader.crossOrigin = 'anonymous';
+
+        texture1 = loader.load(image1);
+        texture2 = loader.load(image2);
         material = new THREE.MeshBasicMaterial({ map: texture1, side: THREE.DoubleSide });
 
         mesh = new THREE.Mesh(geometry, material);
@@ -41,10 +46,20 @@
 
         camera.position.z = 5;
 
-        container.addEventListener('mouseenter', () => isHovered = true);
-        container.addEventListener('mouseleave', () => isHovered = false);
+        isMobile = /Android|webOS|iPhone|iPad/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            container.addEventListener('touchstart', toggleEffect);
+        } else {
+            container.addEventListener('mouseenter', () => isActive = true);
+            container.addEventListener('mouseleave', () => isActive = false);
+        }
 
         animate();
+    }
+
+    function toggleEffect() {
+        isActive = !isActive;
     }
 
     function applyEffect(progress) {
@@ -78,13 +93,13 @@
     }
 
     function updateAnimation() {
-        const targetProgress = isHovered ? 1 : 0;
+        const targetProgress = isActive ? 1 : 0;
         animationProgress += (targetProgress - animationProgress) * 0.1;
 
         applyEffect(animationProgress);
 
-        material.map = isHovered ? texture2 : texture1;
-        material.opacity = isHovered ? animationProgress : 1 - animationProgress;
+        material.map = isActive ? texture2 : texture1;
+        material.opacity = isActive ? animationProgress : 1 - animationProgress;
         material.transparent = true;
         material.needsUpdate = true;
     }
