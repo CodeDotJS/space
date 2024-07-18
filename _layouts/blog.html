@@ -8,7 +8,7 @@ layout: default
 {% assign has_post = false %}
 
 {% for year in posts_by_year %}
-    <h2>{{ year.name }}</h2>
+    <h2 class="post-year"> <span class="post-year-icon"><img src="{{site.baseurl}}/assets/images/telescope.svg" alt=""></span>{{ year.name }}</h2>
     <ul>
     {% for post in year.items %}
         {% if post.private == true %}
@@ -24,6 +24,11 @@ layout: default
         </li>
     {% endfor %}
     </ul>
+    <div class="post-border">
+        <div class="line"></div>
+        <img src="{{site.baseurl}}/assets/images/connections.svg" alt="">
+        <div class="line"></div>
+    </div>
     {% assign has_post = true %}
 {% endfor %}
 
