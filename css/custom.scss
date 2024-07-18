@@ -38,3 +38,32 @@
     font-weight: bold;
     font-size: 16px;
 }
+
+.post-year {
+    .post-year-icon {
+        img {
+            margin-bottom: -5px;
+            margin-right: 10px;
+            width: 30px;
+        }
+    }
+}
+
+.post-border {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+
+  .line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: black;
+    opacity: 0.1;
+  }
+
+  img {
+    width: 20px;
+    margin: 0 10px;
+  }
+}
+
