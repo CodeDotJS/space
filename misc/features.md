@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Features
+permalink: /features
 ---
 
 <span style="border-bottom: 3px solid black;">Existence ft Features</span>
