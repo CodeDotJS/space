@@ -1,205 +1,346 @@
 <style>
-  .shapeArt {
+.shapeArt {
     margin: 0 auto;
     width: 256px;
     height: 256px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-  }
+    cursor: pointer;
+}
+
+.frame {
+    background-color: #ddc;
+    border: solid 5vmin #eee;
+    border-bottom-color: #fff;
+    border-left-color: #eee;
+    border-radius: 2px;
+    border-right-color: #eee;
+    border-top-color: #ddd;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25) inset, 0 5px 10px 5px rgba(0, 0, 0, .25);
+    padding: 4vmin;
+    position: relative;
+    text-align: center;
+}
+
+.frame:before {
+    border-radius: 2px;
+    bottom: -2vmin;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25) inset;
+    content: "";
+    left: -2vmin;
+    position: absolute;
+    right: -2vmin;
+    top: -2vmin;
+}
+
+.frame:after {
+    border-radius: 2px;
+    bottom: -2.5vmin;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
+    content: "";
+    left: -2.5vmin;
+    position: absolute;
+    right: -2.5vmin;
+    top: -2.5vmin;
+}
 </style>
-<div class="shapeArt" data-style="{{ include.style | default: 'abstract' }}" data-color="{{ include.color | default: 'random' }}" data-density="{{ include.density | default: 'medium' }}"></div>
+<div class="shapeArt frame" data-style="{{ include.style | default: 'abstract' }}" data-palette="{{ include.palette | default: 'random' }}" data-density="{{ include.density | default: 'medium' }}"></div>
 <script>
-  (function() {
-    function generateUniqueId() {
-      return 'shapeArt_' + Math.random().toString(36).substr(2, 9);
+(function() {
+  function generateUniqueId() {
+    return 'shapeArt_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  function generateArt(container) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+
+    const style = container.dataset.style || 'abstract';
+    const paletteScheme = container.dataset.palette || 'random';
+    const density = container.dataset.density || 'medium';
+
+    const palette = generatePalette(paletteScheme);
+
+    const gradient = ctx.createLinearGradient(0, 0, 256, 256);
+    gradient.addColorStop(0, palette[4]);
+    gradient.addColorStop(1, adjustColor(palette[4], 20));
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 256, 256);
+
+    const focalPoint = {
+      x: 128 + (Math.random() - 0.5) * 64,
+      y: 128 + (Math.random() - 0.5) * 64
+    };
+
+    drawShapes(ctx, palette, style, density, focalPoint);
+    applyTexture(ctx);
+    applyLightingEffect(ctx, focalPoint);
+    applyColorHarmony(ctx, palette);
+
+    container.style.backgroundImage = `url(${canvas.toDataURL()})`;
+  }
+
+  function generatePalette(colorScheme) {
+    const palettes = {
+      warmEarth: ['#8B4513', '#CD853F', '#DEB887', '#D2691E', '#F4A460'],
+      coolOcean: ['#000080', '#4682B4', '#5F9EA0', '#6495ED', '#87CEEB'],
+      forestGreen: ['#006400', '#228B22', '#32CD32', '#90EE90', '#98FB98'],
+      autumnHarvest: ['#8B0000', '#B22222', '#CD5C5C', '#FF4500', '#FF6347'],
+      pastelDream: ['#FFB6C1', '#FFC0CB', '#FFE4E1', '#F0E68C', '#E6E6FA'],
+      vintageMuted: ['#D4A76A', '#B7A99A', '#8C7F6F', '#A9A49E', '#C1BDB3'],
+      vibrantJewel: ['#8E44AD', '#16A085', '#2980B9', '#C0392B', '#F39C12'],
+      deepSea: ['#1B4F72', '#21618C', '#2874A6', '#3498DB', '#5DADE2'],
+      sunsetGlow: ['#6E2C00', '#B9770E', '#D68910', '#F39C12', '#F8C471'],
+      mistyMountain: ['#4A235A', '#6C3483', '#8E44AD', '#BB8FCE', '#D2B4DE'],
+      goldenHour: ['#FF6B35', '#F7C59F', '#EFEFD0', '#004E89', '#1A659E'],
+      twilightForest: ['#2C5F2D', '#97BC62', '#D3D3D3', '#4D7298', '#2C3E50'],
+      desertBloom: ['#FFA69E', '#FAF3DD', '#B8F2E6', '#AED9E0', '#5E6472']
+    };
+
+    if (colorScheme === 'random') {
+      const schemes = Object.keys(palettes);
+      colorScheme = schemes[Math.floor(Math.random() * schemes.length)];
     }
 
-    function generateArt(container) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 256;
-      const ctx = canvas.getContext('2d');
+    return palettes[colorScheme] || palettes.warmEarth;
+  }
 
-      const style = container.dataset.style || 'abstract';
-      const colorScheme = container.dataset.color || 'random';
-      const density = container.dataset.density || 'medium';
+  function drawShapes(ctx, palette, style, density, focalPoint) {
+    const densityMap = { low: 15, medium: 25, high: 40 };
+    const numShapes = densityMap[density] || 25;
 
-      const palette = generatePalette(colorScheme);
+    for (let i = 0; i < numShapes; i++) {
+      const distanceToFocal = Math.hypot(128 - focalPoint.x, 128 - focalPoint.y);
+      const maxDistance = Math.hypot(128, 128);
+      const scale = 1 - (distanceToFocal / maxDistance) * 0.5;
 
-      ctx.clearRect(0, 0, 256, 256);
+      ctx.save();
+      ctx.translate(focalPoint.x, focalPoint.y);
+      ctx.scale(scale, scale);
+      ctx.translate(-focalPoint.x, -focalPoint.y);
 
-      drawShapes(ctx, palette, style, density);
+      const color = palette[Math.floor(Math.random() * palette.length)];
+      ctx.fillStyle = color;
+      ctx.strokeStyle = adjustColor(color, -20);
 
-      container.style.backgroundImage = `url(${canvas.toDataURL()})`;
-    }
-
-    function generatePalette(colorScheme) {
-      const baseHue = colorScheme === 'random' ? Math.random() * 360 : getColorHue(colorScheme);
-      return [
-        `hsla(${baseHue}, 70%, 50%, 0.8)`,
-        `hsla(${(baseHue + 30) % 360}, 60%, 60%, 0.8)`,
-        `hsla(${(baseHue + 60) % 360}, 50%, 70%, 0.8)`,
-        `hsla(${(baseHue + 180) % 360}, 40%, 30%, 0.8)`,
-        `hsla(${(baseHue + 210) % 360}, 35%, 25%, 0.8)`
-      ];
-    }
-
-    function getColorHue(color) {
-      const hues = {
-        red: 0,
-        orange: 30,
-        yellow: 60,
-        green: 120,
-        blue: 240,
-        purple: 270,
-        pink: 330
-      };
-      return hues[color] || Math.random() * 360;
-    }
-
-    function drawShapes(ctx, palette, style, density) {
-      const densityMap = { low: 10, medium: 20, high: 30 };
-      const numShapes = densityMap[density] || 20;
-
-      for (let i = 0; i < numShapes; i++) {
-        ctx.fillStyle = palette[Math.floor(Math.random() * palette.length)];
-
-        switch(style) {
-          case 'geometric':
-            drawGeometric(ctx);
-            break;
-          case 'organic':
-            drawOrganic(ctx);
-            break;
-          case 'pixelated':
-            drawPixelated(ctx);
-            break;
-          case 'abstract':
-          default:
-            drawAbstract(ctx);
-        }
+      switch(style) {
+        case 'geometric':
+          drawGeometric(ctx);
+          break;
+        case 'organic':
+          drawOrganic(ctx);
+          break;
+        case 'pixelated':
+          drawPixelated(ctx);
+          break;
+        case 'abstract':
+        default:
+          drawAbstract(ctx);
       }
+
+      ctx.restore();
     }
+  }
 
-    function drawGeometric(ctx) {
-      const shapeType = Math.random();
-      if (shapeType < 0.33) {
-        drawTriangle(ctx);
-      } else if (shapeType < 0.66) {
-        drawPolygon(ctx);
-      } else {
-        drawRectangle(ctx);
-      }
+  function drawGeometric(ctx) {
+    const shapeType = Math.random();
+    if (shapeType < 0.25) {
+      drawTriangle(ctx);
+    } else if (shapeType < 0.5) {
+      drawPolygon(ctx);
+    } else if (shapeType < 0.75) {
+      drawRectangle(ctx);
+    } else {
+      drawCircle(ctx);
     }
+  }
 
-    function drawOrganic(ctx) {
-      const shapeType = Math.random();
-      if (shapeType < 0.5) {
-        drawBlob(ctx);
-      } else {
-        drawCurve(ctx);
-      }
+  function drawOrganic(ctx) {
+    const shapeType = Math.random();
+    if (shapeType < 0.33) {
+      drawBlob(ctx);
+    } else if (shapeType < 0.66) {
+      drawCurve(ctx);
+    } else {
+      drawSpiral(ctx);
     }
+  }
 
-    function drawPixelated(ctx) {
-      const size = 8 + Math.floor(Math.random() * 8);
-      const x = Math.floor(Math.random() * (256 / size)) * size;
-      const y = Math.floor(Math.random() * (256 / size)) * size;
-      ctx.fillRect(x, y, size, size);
+  function drawPixelated(ctx) {
+    const size = 4 + Math.floor(Math.random() * 12);
+    const x = Math.floor(Math.random() * (256 / size)) * size;
+    const y = Math.floor(Math.random() * (256 / size)) * size;
+    ctx.fillRect(x, y, size, size);
+  }
+
+  function drawAbstract(ctx) {
+    const shapeType = Math.random();
+    if (shapeType < 0.2) {
+      drawTriangle(ctx);
+    } else if (shapeType < 0.4) {
+      drawPolygon(ctx);
+    } else if (shapeType < 0.6) {
+      drawBlob(ctx);
+    } else if (shapeType < 0.8) {
+      drawLine(ctx);
+    } else {
+      drawSpiral(ctx);
     }
+  }
 
-    function drawAbstract(ctx) {
-      const shapeType = Math.random();
-      if (shapeType < 0.25) {
-        drawTriangle(ctx);
-      } else if (shapeType < 0.5) {
-        drawPolygon(ctx);
-      } else if (shapeType < 0.75) {
-        drawBlob(ctx);
-      } else {
-        drawLine(ctx);
-      }
-    }
-
-    function drawTriangle(ctx) {
-      ctx.beginPath();
-      for (let i = 0; i < 3; i++) {
-        ctx.lineTo(Math.random() * 256, Math.random() * 256);
-      }
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    function drawPolygon(ctx) {
-      const sides = 4 + Math.floor(Math.random() * 3);
-      const centerX = Math.random() * 256;
-      const centerY = Math.random() * 256;
-      const radius = 20 + Math.random() * 60;
-
-      ctx.beginPath();
-      for (let i = 0; i < sides; i++) {
-        const angle = (i / sides) * Math.PI * 2;
-        const x = centerX + Math.cos(angle) * radius;
-        const y = centerY + Math.sin(angle) * radius;
-        ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    function drawRectangle(ctx) {
-      const x = Math.random() * 206;
-      const y = Math.random() * 206;
-      const width = 50 + Math.random() * 50;
-      const height = 50 + Math.random() * 50;
-      ctx.fillRect(x, y, width, height);
-    }
-
-    function drawBlob(ctx) {
-      ctx.beginPath();
-      const points = 5 + Math.floor(Math.random() * 5);
-      const centerX = Math.random() * 256;
-      const centerY = Math.random() * 256;
-      for (let i = 0; i < points; i++) {
-        const angle = (i / points) * Math.PI * 2;
-        const radius = 20 + Math.random() * 40;
-        const x = centerX + Math.cos(angle) * radius;
-        const y = centerY + Math.sin(angle) * radius;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.quadraticCurveTo(centerX, centerY, x, y);
-      }
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    function drawCurve(ctx) {
-      ctx.beginPath();
-      const startX = Math.random() * 256;
-      const startY = Math.random() * 256;
-      const endX = Math.random() * 256;
-      const endY = Math.random() * 256;
-      const controlX = Math.random() * 256;
-      const controlY = Math.random() * 256;
-      ctx.moveTo(startX, startY);
-      ctx.quadraticCurveTo(controlX, controlY, endX, endY);
-      ctx.lineWidth = 2 + Math.random() * 4;
-      ctx.stroke();
-    }
-
-    function drawLine(ctx) {
-      ctx.lineWidth = 1 + Math.random() * 3;
-      ctx.beginPath();
-      ctx.moveTo(Math.random() * 256, Math.random() * 256);
+  function drawTriangle(ctx) {
+    ctx.beginPath();
+    for (let i = 0; i < 3; i++) {
       ctx.lineTo(Math.random() * 256, Math.random() * 256);
-      ctx.stroke();
     }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
 
-    document.querySelectorAll('.shapeArt').forEach(container => {
-      const uniqueId = generateUniqueId();
-      container.id = uniqueId;
-      generateArt(container);
-      container.addEventListener('click', () => generateArt(container));
-    });
-  })();
+  function drawPolygon(ctx) {
+    const sides = 6 + Math.floor(Math.random() * 5);
+    const centerX = Math.random() * 256;
+    const centerY = Math.random() * 256;
+    const radius = 20 + Math.random() * 60;
+
+    ctx.beginPath();
+    for (let i = 0; i < sides; i++) {
+      const angle = (i / sides) * Math.PI * 2;
+      const x = centerX + Math.cos(angle) * radius;
+      const y = centerY + Math.sin(angle) * radius;
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawRectangle(ctx) {
+    const x = Math.random() * 206;
+    const y = Math.random() * 206;
+    const width = 50 + Math.random() * 50;
+    const height = 50 + Math.random() * 50;
+    ctx.fillRect(x, y, width, height);
+    ctx.strokeRect(x, y, width, height);
+  }
+
+  function drawCircle(ctx) {
+    const x = Math.random() * 256;
+    const y = Math.random() * 256;
+    const radius = 10 + Math.random() * 40;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawBlob(ctx) {
+    ctx.beginPath();
+    const points = 5 + Math.floor(Math.random() * 5);
+    const centerX = Math.random() * 256;
+    const centerY = Math.random() * 256;
+    for (let i = 0; i < points; i++) {
+      const angle = (i / points) * Math.PI * 2;
+      const radius = 2 + Math.random() * 40;
+      const x = centerX + Math.cos(angle) * radius;
+      const y = centerY + Math.sin(angle) * radius;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.quadraticCurveTo(centerX, centerY, x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawCurve(ctx) {
+    ctx.beginPath();
+    const startX = Math.random() * 256;
+    const startY = Math.random() * 256;
+    const endX = Math.random() * 256;
+    const endY = Math.random() * 256;
+    const controlX = Math.random() * 256;
+    const controlY = Math.random() * 256;
+    ctx.moveTo(startX, startY);
+    ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+    ctx.lineWidth = 2 + Math.random() * 4;
+    ctx.stroke();
+  }
+
+  function drawLine(ctx) {
+    ctx.lineWidth = 1 + Math.random() * 3;
+    ctx.beginPath();
+    ctx.moveTo(Math.random() * 256, Math.random() * 256);
+    ctx.lineTo(Math.random() * 256, Math.random() * 256);
+    ctx.stroke();
+  }
+
+  function drawSpiral(ctx) {
+    const centerX = Math.random() * 256;
+    const centerY = Math.random() * 256;
+    const radius = 5 + Math.random() * 20;
+    const rotation = Math.random() * 5;
+    const iterations = 50 + Math.floor(Math.random() * 50);
+
+    ctx.beginPath();
+    for (let i = 0; i < iterations; i++) {
+      const angle = 0.1 * i;
+      const x = centerX + (radius + angle) * Math.cos(angle * rotation);
+      const y = centerY + (radius + angle) * Math.sin(angle * rotation);
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  function applyTexture(ctx) {
+    const imageData = ctx.getImageData(0, 0, 256, 256);
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 40) {
+      const noise = (Math.random() - 0.5) * 50;
+      data[i] = Math.max(0, Math.min(255, data[i] + noise));
+      data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+      data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  function applyLightingEffect(ctx, focalPoint) {
+    const gradient = ctx.createRadialGradient(
+      focalPoint.x, focalPoint.y, 0,
+      focalPoint.x, focalPoint.y, 256
+    );
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 256, 256);
+  }
+
+  function applyColorHarmony(ctx, palette) {
+    ctx.globalCompositeOperation = 'color-burn';
+    ctx.fillStyle = palette[0];
+    ctx.globalAlpha = 0.05;
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+  }
+
+  function adjustColor(color, amount) {
+    const num = parseInt(color.slice(1), 16);
+    const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+    const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+    const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+  }
+
+  document.querySelectorAll('.shapeArt').forEach(container => {
+    const uniqueId = generateUniqueId();
+    container.id = uniqueId;
+    generateArt(container);
+    container.addEventListener('click', () => generateArt(container));
+  });
+})();
 </script>
