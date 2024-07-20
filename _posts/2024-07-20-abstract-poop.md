@@ -63,7 +63,7 @@ Just documenting something from an ongoing project. It’s of no use to anyone e
 
 - Density Variations:
 
-{% include artworks/shapes.html density="low" style="geometric" palette="vibrantSea" %}
+{% include artworks/shapes.html density="low" style="geometric" palette="pastelDream" %}
 
 ```
 {% raw %}
