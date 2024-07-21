@@ -1,0 +1,115 @@
+<nav id="side-navbar" class="floating-nav">
+    <button id="floating-nav-toggle" class="floating-nav__toggle">🥚</button>
+    <ul class="floating-nav__list">
+        <li>
+            <a href="{{ site.baseurl }}/features" class="floating-nav__link">
+                <img src="{{site.baseurl}}/assets/images/atom.svg" alt="Atom" class="floating-nav__icon">
+            </a>
+        </li>
+        <li>
+            <a href="{{ site.baseurl }}/list" class="floating-nav__link">
+                <img src="{{site.baseurl}}/assets/images/sputnick-1.svg" alt="Sputnik" class="floating-nav__icon">
+            </a>
+        </li>
+        <li>
+            <a href="{{ site.baseurl }}/ideas" class="floating-nav__link">
+                <img src="{{site.baseurl}}/assets/images/space-invader.svg" alt="Space Invader" class="floating-nav__icon">
+            </a>
+        </li>
+        <li>
+            <a href="{{ site.baseurl }}/credits" class="floating-nav__link">
+                <img src="{{site.baseurl}}/assets/images/satellite.svg" alt="Satellite" class="floating-nav__icon">
+            </a>
+        </li>
+    </ul>
+</nav>
+<style>
+.floating-nav {
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.floating-nav__list {
+    display: none;
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.floating-nav__list.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.floating-nav__list li {
+    margin-bottom: 5px;
+}
+
+.floating-nav__link {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.floating-nav__link:hover {
+    transform: scale(1.1);
+}
+
+.floating-nav__icon {
+    width: 25px;
+    height: 25px;
+}
+
+.floating-nav__toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .floating-nav {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .floating-nav__list {
+        padding: 5px;
+    }
+
+    .floating-nav__toggle {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .floating-nav__icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navToggle = document.getElementById('floating-nav-toggle');
+    const navList = document.querySelector('.floating-nav__list');
+
+    navToggle.addEventListener('click', function() {
+        navList.classList.toggle('active');
+        navToggle.textContent = navList.classList.contains('active') ? '🐬' : '🐦';
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!navToggle.contains(event.target) && !navList.contains(event.target)) {
+            navList.classList.remove('active');
+            navToggle.textContent = '🦄';
+        }
+    });
+});
+</script>
