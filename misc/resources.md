@@ -16,7 +16,7 @@ A not-so-comprehensive list of resources that I actually use and haven't panic-b
 
 __SVG Resources__
 
-- [Cartoon Vectors](https://www.balitung.com/vector/) --- DC, Marvels, Looney Tunes.
+- [Cartoon Vectors](https://www.balitung.com/vector/) --- DC, Marvels, Looney Tunes SVGs.
 - [SVG Repo](https://www.svgrepo.com/) --- SVG Vectors and Icons.
 - [UnDraw](https://undraw.co/illustrations) --- Open source illustrations for any idea.
 
@@ -34,3 +34,7 @@ __User Interface__
 - [Neumorphism](https://neumorphism.io/) --- Generate Soft-UI CSS Code
 - [Fancy Border Radius](https://9elements.github.io/fancy-border-radius/) --- Generate Fancy border radius.
 - [CSS Loaders](https://cssloaders.github.io/) --- Spinners and CSS Loaders.
+
+__Image Tools__
+
+- [RemoveBG](https://remove.bg) --- Remove Background from Images.
