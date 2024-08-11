@@ -67,3 +67,17 @@
   }
 }
 
+.future-post {
+  position: relative;
+}
+
+.future-post .symbol {
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}

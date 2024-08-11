@@ -14,8 +14,11 @@ layout: default
         {% if post.private == true %}
             {% continue %}
         {% endif %}
-        <li class="post-card">
+        <li class="post-card {% if post.date > site.time %}future-post{% endif %}">
             <a class="title" href="{{ site.baseurl }}{{ post.url }}">
+                {% if post.date > site.time %}
+                    <span class="symbol"></span>
+                {% endif %}
                 {{ post.title }}
             </a>
             <div class="details">
