@@ -18,7 +18,7 @@ There is nothing extraordinary about me, but I consider myself an enthusiastic l
 
 I have a strong passion for working towards a purpose, and I find reasonable joy in pursuing it. My interests lie in everything JavaScript and Python related, as well as a bit of reverse engineering, operating systems, and **most importantly** -- daydreaming about mastering low-level engineering. If time is not an issue, I’m usually all in for breaking things, figuring them out, and rebuilding them — it helps me understand how things work under the hood.
 
-<img style="maring-left: -20px; width: 100px" class="profile-picture" src="{{site.baseurl}}/assets/griffin.png">
+<!-- <img style="maring-left: -20px; width: 100px" class="profile-picture" src="{{site.baseurl}}/assets/griffin.png"> -->
 
 Besides the usual, I'm really interested in subjects like history, philosophy, politics, religion, neuroscience, and psychology. I find it rewarding to dive into these topics and gain new insights, as they give me a different perspective on the world. I'm not an expert in any of them (*well, no shit, sherlock!*) , so I approach these subjects with an open mind and a genuine desire to learn more without any preconceived notions or biases. I'm extremely biased.
 
