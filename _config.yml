@@ -41,8 +41,10 @@ navbar:
    link: "projects"
  - name: "Artograph"
    link: "art"
- - name: "Cool 🚀"
+ - name: "Cool"
    link: "updates"
+ - name: "💼"
+   link: "hire"
 
 social_sites:
   github: CodeDotJS
