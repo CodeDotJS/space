@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Bypassing Fotor Paywall"
-tags: ["raw thoughts"]
+tags: ["engineering"]
 ---
 
 Recently, I needed to upscale my passport-sized photo, which was blurry, and I didn't have time to get a new picture taken for some document that I didn’t care much about. After 5 seconds of googling, I stumbled upon Fotor, which seemed like a good tool for the job, and it’s true. When the unblurring was done, I could see the result right in front of my eyes, but unfortunately, I had to pay in order to download the enhanced image. Since it was just a one-time thing, I didn’t want to pay. Well, I could have taken a screenshot and saved it, but where’s the fun in that?
