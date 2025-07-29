@@ -1,3 +1,9 @@
+- image: "preworkd.svg"
+  title: "preworkd"
+  description: "An internal data validation dashboard built with Next.js 15. Features intelligent caching for the last 5 validated jobs, domain search functionality with @ prefix, group-based authentication for settings access, and comprehensive issue categorization. The tool validates job data against configurable API endpoints, provides relative time formatting for cache timestamps, and includes a browse history for managing validation records."
+  github: "preworkd"
+  preview: "https://preworkd.vercel.app"
+
 - image: "ir8x-services.svg"
   title: "ir8x services"
   description: "A collection of scripts that pull data from Spotify, GitHub, WakaTime, Pocket, Instagram, and Goodreads, all working together to power my Cool page 🚀"
