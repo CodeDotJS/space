@@ -57,3 +57,5 @@ plugins:
   - jemoji
 
 timezone: Asia/Kolkata
+
+future: true
