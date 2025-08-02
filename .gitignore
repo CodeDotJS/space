@@ -8,3 +8,5 @@ vendor/
 _drafts
 _config_dev.yml
 backup
+# Private
+ir8x.service/
