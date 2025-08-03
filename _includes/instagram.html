@@ -1,15 +1,80 @@
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
+    const imageElements = document.querySelectorAll('.instagram-container img');
+
+    // Show loading state
+    imageElements.forEach(img => {
+        img.style.opacity = '0.5';
+        img.alt = 'Loading...';
+    });
+
     try {
-        const response = await fetch('https://ir8x.vercel.app/instagram');
-        const data = await response.json();
-        const images = data.images;
-        const imageElements = document.querySelectorAll('.instagram-container img');
-        for (let i = 0; i < Math.min(imageElements.length, images.length); i++) {
-            imageElements[i].src = 'data:image/jpeg;base64,' + images[i];
+        // Add timeout to the fetch request
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12 second timeout
+
+        const response = await fetch('https://ir8x.vercel.app/instagram', {
+            signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        const images = data.images;
+
+        if (!images || images.length === 0) {
+            // No images received - show cat images
+            imageElements.forEach((img, index) => {
+                img.src = '../assets/cat.png';
+                img.style.opacity = '1';
+                img.alt = 'Cat chillin\' while Instagram loads';
+            });
+            return;
+        }
+
+        // Process images efficiently
+        for (let i = 0; i < Math.min(imageElements.length, images.length); i++) {
+            if (images[i]) { // Check if image data exists
+                imageElements[i].src = 'data:image/jpeg;base64,' + images[i];
+                imageElements[i].style.opacity = '1';
+                imageElements[i].alt = `Instagram image ${i + 1}`;
+            } else {
+                // Handle missing images gracefully - show cat image
+                imageElements[i].src = '../assets/cat.png';
+                imageElements[i].style.opacity = '1';
+                imageElements[i].alt = 'Cat stepped in for missing Instagram pic';
+            }
+        }
+
+        console.log(`Successfully loaded ${images.filter(img => img !== null).length} Instagram images`);
     } catch (error) {
         console.error('Error fetching Instagram data:', error);
+
+        // Show fallback cat images instead of error state
+        imageElements.forEach((img, index) => {
+            img.src = '../assets/cat.png';
+            img.style.opacity = '1';
+            img.alt = 'Cat chillin\' while Instagram loads';
+        });
+
+        // Show error message below the images
+        const container = document.querySelector('.instagram-container');
+        if (container && !container.querySelector('.error-message')) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.style.cssText = 'color: #666; font-size: 14px; text-align: center; margin-top: 10px;';
+            errorDiv.textContent = 'Cat took over Instagram duty today!';
+            container.appendChild(errorDiv);
+        }
     }
 });
 </script>
