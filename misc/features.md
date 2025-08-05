@@ -21,6 +21,10 @@ The height is customizable, too ---
 
 {% include artworks/resize.html size=10 height=100 %}
 
+And, there's animation, if you may ---
+
+{% include artworks/resize.html size=5 height=100 animate=true %}
+
 ```
 {% raw %}
 1. {% include artworks/resize.html %}
