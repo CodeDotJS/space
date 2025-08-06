@@ -1,52 +1,192 @@
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
     const imageElements = document.querySelectorAll('.instagram-container img');
+    const CACHE_KEY = 'instagram_images_cache';
+    const CACHE_TIMESTAMP_KEY = 'instagram_cache_timestamp';
+    const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-    // Show loading state
-    imageElements.forEach(img => {
-        img.style.opacity = '0.5';
-        img.alt = 'Loading...';
-    });
+    // Function to get cached data
+    function getCachedData() {
+        try {
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            const timestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
 
-    try {
-        // Add timeout to the fetch request
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12 second timeout
-
-        const response = await fetch('https://ir8x.vercel.app/instagram', {
-            signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            if (cachedData && timestamp) {
+                const age = Date.now() - parseInt(timestamp);
+                if (age < CACHE_DURATION) {
+                    return JSON.parse(cachedData);
+                }
+            }
+        } catch (error) {
+            console.log('Cache read error:', error);
         }
+        return null;
+    }
 
-        const data = await response.json();
-
-        if (data.error) {
-            throw new Error(data.error);
+    // Function to cache data
+    function setCachedData(data) {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+        } catch (error) {
+            console.log('Cache write error:', error);
         }
+    }
 
-        const images = data.images;
-
-        if (!images || images.length === 0) {
-            // No images received - show cat images
-            imageElements.forEach((img, index) => {
+    // Function to show single cat with retry message
+    function showCatError(isRetry = false) {
+        // Hide all images except the first one
+        imageElements.forEach((img, index) => {
+            if (index === 0) {
                 img.src = '../assets/cat.png';
                 img.style.opacity = '1';
-                img.alt = 'Cat chillin\' while Instagram loads';
-            });
-            return;
+                img.alt = 'Meow! Click to try again';
+                img.style.cursor = 'pointer';
+
+                // Add click handler for retry
+                img.onclick = () => {
+                    img.onclick = null; // Remove click handler
+                    img.style.cursor = 'default';
+                    loadInstagramImages(true);
+                };
+            } else {
+                img.style.display = 'none';
+            }
+        });
+
+        // Show error message
+        const container = document.querySelector('.instagram-container');
+        if (container && !container.querySelector('.error-message')) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.style.cssText = 'color: #666; font-size: 14px; text-align: center; margin-top: 10px; grid-column: 1 / -1;';
+
+            if (isRetry) {
+                errorDiv.innerHTML = '🐱 Meow! Instagram seems to be napping.<br>Click my adorable face to try again!';
+            } else {
+                errorDiv.innerHTML = '🐱 Purr... Instagram took a cat nap!<br>Click my whiskers to wake it up!';
+            }
+
+            container.appendChild(errorDiv);
+        }
+    }
+
+    // Function to restore all images display
+    function restoreImagesDisplay() {
+        imageElements.forEach(img => {
+            img.style.display = 'block';
+        });
+
+        // Remove error message
+        const errorMsg = document.querySelector('.error-message');
+        if (errorMsg) {
+            errorMsg.remove();
+        }
+    }
+
+    // Main function to load Instagram images
+    async function loadInstagramImages(isRetry = false) {
+        // Show loading state
+        restoreImagesDisplay();
+        imageElements.forEach(img => {
+            img.style.opacity = '0.5';
+            img.alt = isRetry ? 'Retrying...' : 'Loading...';
+            img.style.cursor = 'default';
+            img.onclick = null;
+        });
+
+        // First, try to load from cache (for instant display)
+        const cachedImages = getCachedData();
+        if (cachedImages && !isRetry) {
+            console.log('Loading from cache...');
+            displayImages(cachedImages, true);
+
+            // Continue to fetch fresh data in background
+            console.log('Fetching fresh data in background...');
         }
 
-        // Process images efficiently
+        try {
+            // Add timeout to the fetch request
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+            const response = await fetch('https://ir8x.vercel.app/instagram', {
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const images = data.images;
+
+            if (!images || images.length === 0) {
+                // Try cached data as fallback
+                if (cachedImages) {
+                    console.log('No new images, using cached data...');
+                    displayImages(cachedImages, true);
+                    return;
+                }
+
+                // No images and no cache - show cat
+                showCatError(isRetry);
+                return;
+            }
+
+            // Cache the new data
+            setCachedData(images);
+
+            // Only update display if we have new data or no cache was shown
+            if (!cachedImages || isRetry || JSON.stringify(images) !== JSON.stringify(cachedImages)) {
+                displayImages(images, false);
+                console.log(`Updated with ${images.filter(img => img !== null).length} fresh Instagram images`);
+            } else {
+                console.log('Fresh data matches cache, no update needed');
+            }
+
+        } catch (error) {
+            console.error('Error fetching Instagram data:', error);
+
+            // Try to use cached data as fallback
+            if (cachedImages) {
+                console.log('API failed, using cached data...');
+                displayImages(cachedImages, true);
+
+                // Show subtle notice about using cached data
+                const container = document.querySelector('.instagram-container');
+                if (container && !container.querySelector('.cache-notice')) {
+                    const noticeDiv = document.createElement('div');
+                    noticeDiv.className = 'cache-notice';
+                    noticeDiv.style.cssText = 'color: #999; font-size: 12px; text-align: center; margin-top: 5px; grid-column: 1 / -1;';
+                    noticeDiv.textContent = '📱 Showing recent posts from cache';
+                    container.appendChild(noticeDiv);
+
+                    // Remove notice after 3 seconds
+                    setTimeout(() => noticeDiv.remove(), 3000);
+                }
+                return;
+            }
+
+            // No cache available - show cat error
+            showCatError(isRetry);
+        }
+    }
+
+    // Function to display images
+    function displayImages(images, isFromCache) {
         for (let i = 0; i < Math.min(imageElements.length, images.length); i++) {
-            if (images[i]) { // Check if image data exists
+            if (images[i]) {
                 imageElements[i].src = 'data:image/jpeg;base64,' + images[i];
                 imageElements[i].style.opacity = '1';
-                imageElements[i].alt = `Instagram image ${i + 1}`;
+                imageElements[i].alt = `Instagram image ${i + 1}${isFromCache ? ' (cached)' : ''}`;
             } else {
                 // Handle missing images gracefully - show cat image
                 imageElements[i].src = '../assets/cat.png';
@@ -54,27 +194,9 @@ document.addEventListener("DOMContentLoaded", async function() {
                 imageElements[i].alt = 'Cat stepped in for missing Instagram pic';
             }
         }
-
-        console.log(`Successfully loaded ${images.filter(img => img !== null).length} Instagram images`);
-    } catch (error) {
-        console.error('Error fetching Instagram data:', error);
-
-        // Show fallback cat images instead of error state
-        imageElements.forEach((img, index) => {
-            img.src = '../assets/cat.png';
-            img.style.opacity = '1';
-            img.alt = 'Cat chillin\' while Instagram loads';
-        });
-
-        // Show error message below the images
-        const container = document.querySelector('.instagram-container');
-        if (container && !container.querySelector('.error-message')) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message';
-            errorDiv.style.cssText = 'color: #666; font-size: 14px; text-align: center; margin-top: 10px;';
-            errorDiv.textContent = 'Cat took over Instagram duty today!';
-            container.appendChild(errorDiv);
-        }
     }
+
+    // Start loading
+    loadInstagramImages();
 });
 </script>
