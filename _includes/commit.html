@@ -21,7 +21,7 @@ async function fetchLatestCommit() {
                 const formattedDate = commitDate.toISOString().split('T')[0];
                 const formattedTime = commitDate.toTimeString().split(' ')[0];
 
-                document.getElementById('github-info').innerHTML = `Pushed the last commit <span id="commit-sha"><a href="${commitURL}">${commitSha}</a></span> to <span id="repo-name"><a href="${repository}">${repoName}</a></span> on <span id="commit-date">${formattedDate}</span> at <span id="commit-time">${formattedTime}</span> with the commit message - <br><blockquote><span id="commit-message">${commitMessage}</span></blockquote>`;
+                document.getElementById('github-info').innerHTML = `Pushed the last commit <span id="commit-sha"><a href="${commitURL}">${commitSha}</a></span> to <span id="repo-name"><a href="${repository}">${repoName}</a></span> on <span id="commit-date">${formattedDate}</span> at <span id="commit-time">${formattedTime}</span> with the commit message - <br><blockquote><span id="commit-message" style="font-family: Inconsolata; font-style: normal">${commitMessage}</span></blockquote>`;
             } else {
                 document.getElementById('github-info').innerText = 'No recent push events found.';
             }
