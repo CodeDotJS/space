@@ -13,9 +13,16 @@ profile-picture: assets/cat.png
 favicon_location: assets/favicon.svg
 
 permalink: /:year-:month-:day-:title/
+
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 sass:
-    style: compressed
-    sass_dir: css
+  style: compressed
+  sass_dir: css
 
 include:
   - assets
@@ -33,18 +40,18 @@ exclude:
   - README.md
 
 navbar:
- - name: "Home"
-   link: ""
- - name: "Blog"
-   link: "blog"
- - name: "Projects"
-   link: "projects"
- - name: "Artograph"
-   link: "art"
- - name: "Cool"
-   link: "updates"
- - name: "💼"
-   link: "hire"
+  - name: "Home"
+    link: ""
+  - name: "Blog"
+    link: "blog"
+  - name: "Projects"
+    link: "projects"
+  - name: "Artograph"
+    link: "art"
+  - name: "Cool"
+    link: "updates"
+  - name: "💼"
+    link: "hire"
 
 social_sites:
   github: CodeDotJS
@@ -57,5 +64,4 @@ plugins:
   - jemoji
 
 timezone: Asia/Kolkata
-
 future: true
