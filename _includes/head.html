@@ -37,7 +37,26 @@
     <script src="{{site.baseurl}}/assets/highlights/highlight.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Highlight.js (ignore Mermaid) -->
     <script>
-        hljs.highlightAll();
+      hljs.highlightAll({ ignore: ['mermaid'] });
+    </script>
+
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("code.language-mermaid").forEach(el => {
+          const pre = el.parentElement;
+          pre.classList.add("mermaid");
+          pre.textContent = el.textContent;
+        });
+
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "default"
+        });
+      });
     </script>
 </head>
