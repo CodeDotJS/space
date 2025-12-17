@@ -10,3 +10,5 @@ _config_dev.yml
 backup
 # Private
 ir8x.service/
+ir8x 2.service
+ir8x
