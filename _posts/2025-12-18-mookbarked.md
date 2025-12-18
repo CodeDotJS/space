@@ -5,6 +5,12 @@ tags: ["os, security, chrome extensions"]
 ---
 
 
+{% include artworks/resize.html size=8 height=50  %}
+
+
+<span class="highlight-black"><a href="https://github.com/CodeDotJS/mookbarked">Mookbarked @ Github</a></span>
+{: .center }
+
 I used Pocket for years to save articles and videos. When it shut down, I needed a simple replacement. I have a [`/updates`](/updates) page on my blog that shows the last 3 articles and videos I liked—it used to pull from Pocket's API. Now I needed:
 
 - a quick way to bookmark links (articles + videos)
