@@ -4,13 +4,17 @@ async function fetchPocketItems() {
         const response = await fetch('https://ir8x.vercel.app/pocket');
         const data = await response.json();
 
-        // Display one article with excerpt
-        if (data.articles.length > 0) {
-            const article = data.articles[0];
-            document.getElementById('article-link').href = article.resolved_url;
-            document.getElementById('article-title').textContent = article.resolved_title || article.given_title || article.resolved_url;
-            document.getElementById('article-excerpt').textContent = truncateText(article.excerpt, 30);
-        }
+        const articleList = document.getElementById('article-list');
+        articleList.innerHTML = '';
+
+        data.articles.slice(0, 3).forEach(article => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = article.resolved_url;
+            a.textContent = article.resolved_title || article.given_title || article.resolved_url;
+            li.appendChild(a);
+            articleList.appendChild(li);
+        });
 
         const videoList = document.getElementById('video-list');
         videoList.innerHTML = '';
@@ -24,16 +28,8 @@ async function fetchPocketItems() {
             videoList.appendChild(li);
         });
     } catch (error) {
-        console.error('Error fetching Pocket items:', error);
+        console.error('Error fetching items:', error);
     }
-}
-
-function truncateText(text, wordLimit) {
-    const words = text.split(' ');
-    if (words.length > wordLimit) {
-        return words.slice(0, wordLimit).join(' ') + '...';
-    }
-    return text;
 }
 
 fetchPocketItems();
