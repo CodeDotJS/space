@@ -2,11 +2,17 @@
 async function fetchLatestCommit() {
     try {
         const response = await fetch('https://api.github.com/users/CodeDotJS/events/public');
+
+        if (!response.ok) {
+            throw new Error(`GitHub API returned ${response.status}`);
+        }
+
         const events = await response.json();
 
         if (events.length > 0) {
             const latestEvent = events.find(event => event.type === 'PushEvent');
-            if (latestEvent) {
+
+            if (latestEvent && latestEvent.payload.commits && latestEvent.payload.commits.length > 0) {
                 const base = 'https://github.com/';
 
                 const repoName = latestEvent.repo.name;
@@ -23,14 +29,14 @@ async function fetchLatestCommit() {
 
                 document.getElementById('github-info').innerHTML = `Pushed the last commit <span id="commit-sha"><a href="${commitURL}">${commitSha}</a></span> to <span id="repo-name"><a href="${repository}">${repoName}</a></span> on <span id="commit-date">${formattedDate}</span> at <span id="commit-time">${formattedTime}</span> with the commit message - <br><blockquote><span id="commit-message" style="font-family: Inconsolata; font-style: normal">${commitMessage}</span></blockquote>`;
             } else {
-                document.getElementById('github-info').innerText = 'No recent push events found.';
+                document.getElementById('github-info').innerHTML = '<center><img src="{{site.baseurl}}/assets/images/sloth.svg" alt="No recent commits" style="max-width: 120px;"></center>';
             }
         } else {
-            document.getElementById('github-info').innerText = 'No recent events found.';
+            document.getElementById('github-info').innerHTML = '<img src="{{site.baseurl}}/assets/images/sloth.svg" alt="No recent commits" style="max-width: 120px;">';
         }
     } catch (error) {
         console.error('Error fetching latest commit:', error);
-        document.getElementById('github-info').innerText = 'Error loading commit information';
+        document.getElementById('github-info').innerText = 'Failed to load commit data';
     }
 }
 
