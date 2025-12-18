@@ -1,3 +1,16 @@
+- image: "mookbarked.svg"
+  title: "mookbarked"
+  description: "➿ Chrome extension that saves bookmarks as GitHub Issues using a GitHub PAT stored in the OS keychain via Native Messaging. Avoids browser credential storage by delegating secrets to a native host. Designed as a lightweight Pocket replacement."
+  github: "mookbarked"
+  blog: "2025-12-18-mookbarked"
+
+# - image: "capchan.png"
+#   title: "cap.chan"
+#   description: "A CAPTCHA decoder that maps HTML-encoded letter patterns to binary matrices, enabling automatic decoding once a dataset of letter patterns is built."
+#   github: "cap.chan"
+#   preview: "https://preworkd.vercel.app"
+#   blog: "2025-08-28-cap-chan"
+
 - image: "preworkd.svg"
   title: "preworkd"
   description: "An internal data validation dashboard built with Next.js 15. Features intelligent caching for the last 5 validated jobs, domain search functionality with @ prefix, group-based authentication for settings access, and comprehensive issue categorization. The tool validates job data against configurable API endpoints, provides relative time formatting for cache timestamps, and includes a browse history for managing validation records."
