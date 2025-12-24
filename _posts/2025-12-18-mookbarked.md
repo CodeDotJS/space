@@ -8,8 +8,13 @@ tags: ["os, security, chrome extensions"]
 {% include artworks/resize.html size=8 height=50  %}
 
 
+
+<img src="{{site.baseurl}}/assets/images/posts/mook.png" alt="">
+
 <span class="highlight-black"><a href="https://github.com/CodeDotJS/mookbarked">Mookbarked @ Github</a></span>
 {: .center }
+
+---
 
 I used Pocket for years to save articles and videos. When it shut down, I needed a simple replacement. I have a [`/updates`](/updates) page on my blog that shows the last 3 articles and videos I liked—it used to pull from Pocket's API. Now I needed:
 
@@ -624,61 +629,6 @@ For higher traffic:
 
 ## Future Improvements
 
-### Keyboard Shortcuts
-
-Add a keyboard shortcut to quickly bookmark the current page:
-
-```json
-{
-  "commands": {
-    "bookmark-page": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+B",
-        "mac": "Command+Shift+B"
-      },
-      "description": "Bookmark current page"
-    }
-  }
-}
-```
-
-### Context Menu Integration
-
-Right-click on a link → "Bookmark this link"
-
-```javascript
-chrome.contextMenus.create({
-  id: "bookmark-link",
-  title: "Bookmark this link",
-  contexts: ["link"]
-});
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "bookmark-link") {
-    createBookmark({
-      url: info.linkUrl,
-      title: info.linkUrl  // Would need to fetch actual title
-    });
-  }
-});
-```
-
-### Tag Support
-
-GitHub labels work well for tags. Could add custom labels:
-
-```javascript
-const labels = ['article', ...customTags];
-
-await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-  body: JSON.stringify({
-    title: bookmark.title,
-    body: bookmark.body,
-    labels: labels
-  })
-});
-```
-
 ### Offline Support
 
 Currently requires internet for GitHub API. Could add:
@@ -687,15 +637,6 @@ Currently requires internet for GitHub API. Could add:
 3. Use IndexedDB for local queue
 
 But this adds significant complexity. YAGNI.
-
-### Browser Action Badge
-
-Show count of bookmarks created today:
-
-```javascript
-chrome.action.setBadgeText({text: "5"});
-chrome.action.setBadgeBackgroundColor({color: "#4285f4"});
-```
 
 ### GitHub Actions for Updates Page
 
@@ -733,6 +674,127 @@ jobs:
 ```
 
 Then update `updates-page/script.js` to fetch from `bookmarks.json` instead of the API.
+
+---
+
+## Post-Launch Updates
+{: .center}
+
+After the initial implementation, several features from the "Future Improvements" list were implemented, along with some bug fixes and performance optimizations.
+
+- **Tag Support**
+
+Tags are now supported as GitHub issue labels. The popup includes a tag input field with chip-style display. Tags are added to the `labels` array when creating issues:
+
+```javascript
+const labels = ['article', ...customTags];
+
+await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+  body: JSON.stringify({
+    title: bookmark.title,
+    body: bookmark.body,
+    labels: labels
+  })
+});
+```
+
+- **Context Menu Integration**
+
+Right-click context menu integration allows quick saving without opening the popup. The context menu item "Quick Save with MookBarked" uses default tags configured in the options page. This reduces friction for frequent bookmarking.
+
+- **Keyboard Shortcuts**
+
+Keyboard shortcuts were added to the popup:
+- `Cmd/Ctrl+Enter` or `Cmd/Ctrl+S` - Submit form
+- `Esc` - Close popup
+
+These work even when focus is in textareas or tag inputs, improving the keyboard-only workflow.
+
+- **Duplicate URL Detection**
+
+Before saving, the extension checks if the URL already exists in GitHub issues. If a duplicate is found, the user can either edit the existing bookmark or replace it. The duplicate check queries GitHub's issue search API, looking for matching URLs in the YAML frontmatter.
+
+- **Edit Existing Bookmarks**
+
+When a duplicate is detected, users can edit the existing bookmark instead of creating a new one. The form pre-populates with the existing bookmark's data (title, notes, tags, type), and the save button changes to "Update Bookmark". This uses GitHub's issue update API endpoint.
+
+- **Bulk Save**
+
+A "Mook All Tabs" button saves all open tabs in the current window at once. Each tab is processed sequentially to avoid rate limiting issues.
+
+- **Dark Mode**
+
+The popup respects the system's color scheme preference using CSS `@media (prefers-color-scheme: dark)`. No manual toggle needed.
+
+- **Extension Badge Feedback**
+
+The extension badge shows visual feedback during quick save operations. This uses `chrome.action.setBadgeText()` and `chrome.action.setBadgeBackgroundColor()` to provide status updates.
+
+- **In-Memory Cache for Duplicate Detection**
+
+An in-memory cache was added to improve duplicate detection performance. Recently created bookmarks (within the same session) are cached, allowing instant duplicate checks without API calls. This addresses GitHub API indexing delays that could allow duplicate saves within a short time window.
+
+### Issues Encountered and Resolutions
+{: .center}
+
+**Issue 1: Duplicate URL Detection Unreliable**
+
+- **Problem:** Duplicate detection only worked after reloading the extension. Within the same session, the same URL could be saved multiple times.
+- **Root Cause:** GitHub's API has indexing delays. Newly created issues might not appear in search results immediately, allowing duplicates to slip through.
+- **Resolution:** Implemented an in-memory cache (`recentBookmarksCache`) in the background service worker. When a bookmark is created, it's added to the cache with its URL and issue number. Before checking the GitHub API, the cache is checked first. This provides instant duplicate detection for recently saved URLs.
+
+The cache is a simple Map structure:
+```javascript
+const recentBookmarksCache = new Map(); // url -> {issueNumber, issueUrl, timestamp}
+
+function addToCache(url, issueNumber, issueUrl) {
+  recentBookmarksCache.set(url, {
+    issueNumber,
+    issueUrl,
+    timestamp: Date.now()
+  });
+}
+
+function checkCache(url) {
+  const cached = recentBookmarksCache.get(url);
+  if (cached && Date.now() - cached.timestamp < 3600000) { // 1 hour TTL
+    return cached;
+  }
+  return null;
+}
+```
+
+**Issue 2: URL Normalization in Duplicate Detection**
+
+- **Problem:** URLs with and without trailing slashes were treated as different URLs, allowing duplicates like `https://example.com` and `https://example.com/` to both be saved.
+- **Root Cause:** String comparison didn't account for trailing slash variations.
+- **Resolution:** Implemented URL normalization that compares URLs both with and without trailing slashes:
+
+```javascript
+const normalizedUrl = url.trim();
+const normalizedUrlNoTrailing = normalizedUrl.replace(/\/$/, '');
+const normalizedUrlWithTrailing = normalizedUrlNoTrailing + '/';
+
+// Compare against both variations
+if (existingUrl === normalizedUrl ||
+    existingUrl === normalizedUrlNoTrailing ||
+    existingUrl === normalizedUrlWithTrailing ||
+    // ... additional comparisons
+) {
+  return issue; // Duplicate found
+}
+```
+
+**Issue 3: YAML Frontmatter URL Extraction**
+
+- **Problem:** URL extraction from YAML frontmatter was unreliable. URLs could be quoted or unquoted, and the regex patterns didn't handle all cases.
+- **Root Cause:** Multiple regex patterns were needed to handle different YAML formats: `url: "https://..."`, `url: 'https://...'`, `url: https://...`.
+- **Resolution:** Implemented multiple extraction methods with fallbacks:
+1. Primary regex for quoted URLs: `/url:\s*["']([^"']+)["']/`
+2. Fallback regex for unquoted URLs: `/url:\s*([^\s\n]+)/`
+3. Global regex search as final fallback
+
+Each method handles escaped quotes and normalizes the extracted URL before comparison.
 
 ---
 
