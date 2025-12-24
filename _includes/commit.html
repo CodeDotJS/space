@@ -12,27 +12,66 @@ async function fetchLatestCommit() {
         if (events.length > 0) {
             const latestEvent = events.find(event => event.type === 'PushEvent');
 
-            if (latestEvent && latestEvent.payload.commits && latestEvent.payload.commits.length > 0) {
+            if (latestEvent) {
                 const base = 'https://github.com/';
-
                 const repoName = latestEvent.repo.name;
-                const commitMessage = latestEvent.payload.commits[0].message;
-                const commit = latestEvent.payload.commits[0].sha;
-                const commitSha = latestEvent.payload.commits[0].sha.substring(0, 7);
-
                 const repository = `${base}${repoName}`;
-                const commitURL = `${repository}/commit/${commit}`;
 
-                const commitDate = new Date(latestEvent.created_at);
+                let commitShaFull;
+                let commitMessage;
+                let commitDate;
+
+                // Case 1: commits array exists (best case)
+                if (latestEvent.payload.commits && latestEvent.payload.commits.length > 0) {
+                    commitShaFull = latestEvent.payload.commits[0].sha;
+                    commitMessage = latestEvent.payload.commits[0].message;
+                    commitDate = new Date(latestEvent.created_at);
+                }
+                // Case 2: commits array missing → fetch commit via head SHA
+                else if (latestEvent.payload.head) {
+                    commitShaFull = latestEvent.payload.head;
+
+                    const commitApi = `https://api.github.com/repos/${repoName}/commits/${commitShaFull}`;
+                    const commitRes = await fetch(commitApi);
+
+                    if (!commitRes.ok) {
+                        throw new Error('Failed to fetch commit details');
+                    }
+
+                    const commitData = await commitRes.json();
+                    commitMessage = commitData.commit.message;
+                    commitDate = new Date(commitData.commit.author.date);
+                } else {
+                    throw new Error('No commit data available');
+                }
+
+                const commitSha = commitShaFull.substring(0, 7);
+                const commitURL = `${repository}/commit/${commitShaFull}`;
+
                 const formattedDate = commitDate.toISOString().split('T')[0];
                 const formattedTime = commitDate.toTimeString().split(' ')[0];
 
-                document.getElementById('github-info').innerHTML = `Pushed the last commit <span id="commit-sha"><a href="${commitURL}">${commitSha}</a></span> to <span id="repo-name"><a href="${repository}">${repoName}</a></span> on <span id="commit-date">${formattedDate}</span> at <span id="commit-time">${formattedTime}</span> with the commit message - <br><blockquote><span id="commit-message" style="font-family: Inconsolata; font-style: normal">${commitMessage}</span></blockquote>`;
+                document.getElementById('github-info').innerHTML = `
+                    Pushed the last commit
+                    <span id="commit-sha"><a href="${commitURL}">${commitSha}</a></span>
+                    to <span id="repo-name"><a href="${repository}">${repoName}</a></span>
+                    on <span id="commit-date">${formattedDate}</span>
+                    at <span id="commit-time">${formattedTime}</span>
+                    with the commit message -
+                    <br>
+                    <blockquote>
+                        <span id="commit-message" style="font-family: Inconsolata; font-style: normal">
+                            ${commitMessage}
+                        </span>
+                    </blockquote>
+                `;
             } else {
-                document.getElementById('github-info').innerHTML = '<center><img src="{{site.baseurl}}/assets/images/sloth.svg" alt="No recent commits" style="max-width: 120px;"></center>';
+                document.getElementById('github-info').innerHTML =
+                    '<center><img src="{{site.baseurl}}/assets/images/sloth.svg" alt="No recent commits" style="max-width: 120px;"></center>';
             }
         } else {
-            document.getElementById('github-info').innerHTML = '<img src="{{site.baseurl}}/assets/images/sloth.svg" alt="No recent commits" style="max-width: 120px;">';
+            document.getElementById('github-info').innerHTML =
+                '<img src="{{site.baseurl}}/assets/images/sloth.svg" alt="No recent commits" style="max-width: 120px;">';
         }
     } catch (error) {
         console.error('Error fetching latest commit:', error);
