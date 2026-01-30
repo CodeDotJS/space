@@ -13,7 +13,16 @@ async function fetchLastPlayedSong() {
             const timeDifference = Math.abs(currentTime - playedAt);
             const minutesDifference = Math.floor(timeDifference / (1000 * 60));
             const hoursDifference = Math.floor(minutesDifference / 60);
-            const formattedTime = hoursDifference > 0 ? `${hoursDifference} hours ago` : `${minutesDifference} minutes ago`;
+            const daysDifference = Math.floor(hoursDifference / 24);
+
+            let formattedTime;
+            if (daysDifference > 0) {
+                formattedTime = daysDifference === 1 ? '1 day ago' : `${daysDifference} days ago`;
+            } else if (hoursDifference > 0) {
+                formattedTime = `${hoursDifference} hours ago`;
+            } else {
+                formattedTime = `${minutesDifference} minutes ago`;
+            }
 
             document.querySelector('.song-name').textContent = songName;
             document.querySelector('.song-cover').src = cover;
