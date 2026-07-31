@@ -1,3 +1,9 @@
+- image: "bitchat-mirror.svg"
+  title: "Bitchat Mirror"
+  description: "🇮🇳 Unofficial mirror of the official bitchat-android APKs, created after Jack Dorsey published India's GitHub takedown notice targeting the Bitchat repositories on X. Continuously mirrors upstream releases, maintains a searchable release index, and serves APKs through a resilient static distribution pipeline powered by Cloudflare R2 and Vercel."
+  github: "bitchat-mirror"
+  preview: "https://bitchat-mirror.vercel.app"
+
 - image: "mookbarked.svg"
   title: "mookbarked"
   description: "➿ Chrome extension that saves bookmarks as GitHub Issues using a GitHub PAT stored in the OS keychain via Native Messaging. Avoids browser credential storage by delegating secrets to a native host. Designed as a lightweight Pocket replacement."
