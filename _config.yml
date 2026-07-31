@@ -38,6 +38,8 @@ exclude:
   - .git
   - .gitignore
   - README.md
+  - "ir8x services"
+  - "ir8x backup"
 
 navbar:
   - name: "Home"
