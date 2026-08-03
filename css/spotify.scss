@@ -12,11 +12,22 @@
       flex-direction: column;
     }
 
+    .song-link {
+      display: inline-block;
+      line-height: 0;
+    }
+
     .song-cover {
       width: 100px;
       height: 100px;
       border-radius: 20px;
       margin-bottom: 15px;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+
+      &:hover {
+        opacity: 0.85;
+      }
     }
 
     .song-name {
