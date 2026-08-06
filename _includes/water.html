@@ -1,0 +1,202 @@
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const chartEl = document.getElementById('waterChart');
+    const svg = document.getElementById('waterSvg');
+    const readout = document.getElementById('waterReadout');
+    if (!chartEl || !svg || !readout) return;
+
+    const readoutDate = readout.querySelector('.water-readout-date');
+    const readoutTokens = readout.querySelector('.water-readout-tokens');
+
+    const W = 620;
+    const H = 220;
+    const PAD = { top: 22, right: 8, bottom: 28, left: 8 };
+    const innerW = W - PAD.left - PAD.right;
+    const innerH = H - PAD.top - PAD.bottom;
+
+    const formatTokens = (value) => {
+        if (value >= 1000000) {
+            const millions = value / 1000000;
+            const rounded = millions >= 10 ? millions.toFixed(0) : millions.toFixed(1).replace(/\.0$/, '');
+            return `${rounded}M`;
+        }
+        if (value >= 1000) {
+            const thousands = value / 1000;
+            const rounded = thousands >= 10 ? thousands.toFixed(0) : thousands.toFixed(1).replace(/\.0$/, '');
+            return `${rounded}k`;
+        }
+        return `${value}`;
+    };
+
+    const formatDate = (iso) => {
+        const date = new Date(iso + 'T00:00:00');
+        return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
+
+    const formatShort = (iso) => {
+        const date = new Date(iso + 'T00:00:00');
+        return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    };
+
+    const buildSmoothPath = (points) => {
+        if (points.length === 0) return '';
+        if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+
+        let d = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 0; i < points.length - 1; i++) {
+            const p0 = points[Math.max(0, i - 1)];
+            const p1 = points[i];
+            const p2 = points[i + 1];
+            const p3 = points[Math.min(points.length - 1, i + 2)];
+            const cp1x = p1.x + (p2.x - p0.x) / 6;
+            const cp1y = p1.y + (p2.y - p0.y) / 6;
+            const cp2x = p2.x - (p3.x - p1.x) / 6;
+            const cp2y = p2.y - (p3.y - p1.y) / 6;
+            d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+        }
+        return d;
+    };
+
+    const setReadout = (dateText, tokensText, active) => {
+        readoutDate.textContent = dateText;
+        readoutTokens.textContent = tokensText;
+        readout.classList.toggle('is-active', !!active);
+    };
+
+    const render = (data) => {
+        const maxTokens = Math.max(...data.map(d => d.tokens), 1);
+        const total = data.reduce((sum, d) => sum + d.tokens, 0);
+        const avg = Math.round(total / data.length);
+        const peak = data.reduce((best, d) => d.tokens > best.tokens ? d : best, data[0]);
+
+        document.getElementById('waterTotal').textContent = formatTokens(total);
+        document.getElementById('waterAvg').textContent = formatTokens(avg);
+        document.getElementById('waterPeak').textContent = formatTokens(peak.tokens);
+        document.getElementById('waterRangeStart').textContent = formatShort(data[0].date);
+        document.getElementById('waterRangeEnd').textContent = formatShort(data[data.length - 1].date);
+        const footerMid = document.querySelector('.water-footer-mid');
+        if (footerMid) footerMid.textContent = `${data.length} days`;
+
+        setReadout('Hover the tide', '', false);
+
+        const points = data.map((d, i) => {
+            const x = PAD.left + (data.length === 1 ? innerW / 2 : (i / (data.length - 1)) * innerW);
+            const y = PAD.top + innerH - (d.tokens / maxTokens) * innerH;
+            return { x, y, ...d };
+        });
+
+        const linePath = buildSmoothPath(points);
+        const areaPath = `${linePath} L ${points[points.length - 1].x} ${PAD.top + innerH} L ${points[0].x} ${PAD.top + innerH} Z`;
+
+        const tickCount = Math.min(5, data.length);
+        const tickIndexes = Array.from({ length: tickCount }, (_, i) =>
+            Math.round(i * (data.length - 1) / Math.max(tickCount - 1, 1))
+        );
+
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svg.innerHTML = `
+            <defs>
+                <linearGradient id="waterFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FF0F00" stop-opacity="0.18"/>
+                    <stop offset="40%" stop-color="#313396" stop-opacity="0.16"/>
+                    <stop offset="100%" stop-color="#313396" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="waterStroke" x1="0%" y1="0" x2="100%" y2="0">
+                    <stop offset="0%" stop-color="#272727">
+                        <animate attributeName="stop-color" values="#272727;#FF0F00;#313396;#0062ff;#272727" dur="6s" repeatCount="indefinite"/>
+                    </stop>
+                    <stop offset="50%" stop-color="#FF0F00">
+                        <animate attributeName="stop-color" values="#FF0F00;#313396;#0062ff;#272727;#FF0F00" dur="6s" repeatCount="indefinite"/>
+                    </stop>
+                    <stop offset="100%" stop-color="#313396">
+                        <animate attributeName="stop-color" values="#313396;#0062ff;#272727;#FF0F00;#313396" dur="6s" repeatCount="indefinite"/>
+                    </stop>
+                </linearGradient>
+            </defs>
+            <line class="water-baseline" x1="${PAD.left}" y1="${PAD.top + innerH}" x2="${W - PAD.right}" y2="${PAD.top + innerH}"/>
+            <path class="water-area" d="${areaPath}" fill="url(#waterFill)"/>
+            <path class="water-line" d="${linePath}" fill="none" stroke="url(#waterStroke)"/>
+            <g class="water-ticks">
+                ${tickIndexes.map(i => {
+                    const p = points[i];
+                    return `<text x="${p.x}" y="${H - 6}" text-anchor="middle">${formatShort(data[i].date)}</text>`;
+                }).join('')}
+            </g>
+            <line class="water-guide" id="waterGuide" x1="0" y1="${PAD.top}" x2="0" y2="${PAD.top + innerH}" visibility="hidden"/>
+            <circle class="water-dot" id="waterDot" r="4.5" visibility="hidden"/>
+        `;
+
+        const line = svg.querySelector('.water-line');
+        const area = svg.querySelector('.water-area');
+        if (line && line.getTotalLength) {
+            const length = line.getTotalLength();
+            line.style.strokeDasharray = `${length}`;
+            line.style.strokeDashoffset = `${length}`;
+            line.getBoundingClientRect();
+            requestAnimationFrame(() => {
+                line.classList.add('is-drawn');
+                line.style.strokeDashoffset = '0';
+                if (area) area.classList.add('is-drawn');
+            });
+        } else if (area) {
+            area.classList.add('is-drawn');
+        }
+
+        const guide = svg.getElementById('waterGuide');
+        const dot = svg.getElementById('waterDot');
+
+        const nearestIndex = (clientX) => {
+            const rect = svg.getBoundingClientRect();
+            const ratio = (clientX - rect.left) / rect.width;
+            const x = ratio * W;
+            let best = 0;
+            let bestDist = Infinity;
+            points.forEach((p, i) => {
+                const dist = Math.abs(p.x - x);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    best = i;
+                }
+            });
+            return best;
+        };
+
+        const showPoint = (index) => {
+            const p = points[index];
+            const d = data[index];
+            guide.setAttribute('visibility', 'visible');
+            dot.setAttribute('visibility', 'visible');
+            guide.setAttribute('x1', p.x);
+            guide.setAttribute('x2', p.x);
+            dot.setAttribute('cx', p.x);
+            dot.setAttribute('cy', p.y);
+            setReadout(formatDate(d.date), `${formatTokens(d.tokens)} tokens`, true);
+        };
+
+        const hidePoint = () => {
+            guide.setAttribute('visibility', 'hidden');
+            dot.setAttribute('visibility', 'hidden');
+            setReadout('Hover the tide', '', false);
+        };
+
+        chartEl.onmousemove = (event) => showPoint(nearestIndex(event.clientX));
+        chartEl.onmouseleave = hidePoint;
+        chartEl.ontouchstart = (event) => {
+            if (event.touches[0]) showPoint(nearestIndex(event.touches[0].clientX));
+        };
+    };
+
+    fetch('https://ir8x.vercel.app/water')
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data) || data.length === 0) {
+                console.error('Unexpected /water response:', data);
+                return;
+            }
+            render(data);
+        })
+        .catch(error => {
+            console.error('Error fetching water data:', error);
+        });
+});
+</script>
