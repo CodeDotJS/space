@@ -144,6 +144,166 @@
     }
   }
 
+  .water {
+    margin-top: 48px;
+
+    h3 {
+      font-family: "Open Sans";
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: inherit;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .water-panel {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .water-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .water-stat {
+      text-align: center;
+      padding: 4px 2px 8px;
+    }
+
+    .water-stat-label {
+      display: block;
+      font-family: "Open Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(51, 51, 51, 0.55);
+      margin-bottom: 4px;
+    }
+
+    .water-stat-value {
+      font-family: "Cascadia Code", "Inconsolata", monospace;
+      font-size: 1.35em;
+      color: #272727;
+      letter-spacing: -0.02em;
+      border-bottom: 2.5px solid #313396;
+    }
+
+    #waterPeak {
+      border-bottom-color: #FF0F00;
+    }
+
+    .water-readout {
+      min-height: 1.6em;
+      margin: 4px 0 10px;
+      text-align: center;
+      font-family: "Labrada", serif;
+      color: rgba(51, 51, 51, 0.45);
+      transition: color 0.15s ease;
+
+      &.is-active {
+        color: #272727;
+      }
+    }
+
+    .water-readout-date {
+      font-family: "Cascadia Code", "Inconsolata", monospace;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+
+    .water-readout-tokens {
+      font-size: 15px;
+      border-bottom: 2.5px solid transparent;
+    }
+
+    .water-readout.is-active .water-readout-tokens {
+      border-bottom-color: #FF0F00;
+    }
+
+    .water-chart {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+      cursor: crosshair;
+    }
+
+    #waterSvg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    .water-baseline {
+      stroke: rgba(39, 39, 39, 0.12);
+      stroke-width: 1;
+    }
+
+    .water-area {
+      opacity: 0;
+      transition: opacity 1.1s ease 0.35s;
+
+      &.is-drawn {
+        opacity: 1;
+      }
+    }
+
+    .water-line {
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke-dashoffset 1.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .water-ticks text {
+      font-family: "Andika", sans-serif;
+      font-size: 10px;
+      fill: rgba(51, 51, 51, 0.5);
+    }
+
+    .water-guide {
+      stroke: rgba(39, 39, 39, 0.28);
+      stroke-width: 1;
+      stroke-dasharray: 3 4;
+      pointer-events: none;
+    }
+
+    .water-dot {
+      fill: #ffffdd;
+      stroke: #FF0F00;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .water-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-family: "Andika", sans-serif;
+      font-size: 11px;
+      color: rgba(51, 51, 51, 0.55);
+    }
+
+    .water-footer-mid {
+      font-family: "Open Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #272727;
+      opacity: 0.55;
+    }
+  }
+
   .pocket {
      .content-item {
         margin-top: 10px;
