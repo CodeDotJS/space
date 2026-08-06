@@ -7,6 +7,7 @@ layout: default
 {% include goodreads.html %}
 {% include instagram.html %}
 {% include wakatime.html %}
+{% include water.html %}
 {% include pocket.html %}
 {% include words.html %}
 {% include quote.html %}
@@ -105,5 +106,36 @@ layout: default
     <div class="wakatime">
         <h3>Coding Activity</h3>
         <canvas id="codingChart"></canvas>
+    </div>
+    <div class="water">
+        <h3>Token Usage</h3>
+        <div class="water-panel">
+            <div class="water-meta" id="waterMeta" aria-live="polite">
+                <div class="water-stat">
+                    <span class="water-stat-label">Total</span>
+                    <span class="water-stat-value" id="waterTotal">—</span>
+                </div>
+                <div class="water-stat">
+                    <span class="water-stat-label">Daily avg</span>
+                    <span class="water-stat-value" id="waterAvg">—</span>
+                </div>
+                <div class="water-stat">
+                    <span class="water-stat-label">Peak</span>
+                    <span class="water-stat-value" id="waterPeak">—</span>
+                </div>
+            </div>
+            <div class="water-readout" id="waterReadout">
+                <span class="water-readout-date">Hover the tide</span>
+                <span class="water-readout-tokens"></span>
+            </div>
+            <div class="water-chart" id="waterChart">
+                <svg id="waterSvg" viewBox="0 0 620 220" preserveAspectRatio="none" role="img" aria-label="Daily token usage over the last 90 days"></svg>
+            </div>
+            <div class="water-footer">
+                <span id="waterRangeStart">—</span>
+                <span class="water-footer-mid">90 days</span>
+                <span id="waterRangeEnd">—</span>
+            </div>
+        </div>
     </div>
 </div>
