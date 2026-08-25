@@ -12,5 +12,6 @@ backup
 ir8x.service/
 ir8x 2.service
 ir8x
-ir8x services/
 ir8x backup/
+ir8x services/
+.DS_Store
