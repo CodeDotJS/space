@@ -1,3 +1,9 @@
+- image: "meownow.svg"
+  title: "meownow"
+  description: "An invite-only, end-to-end encrypted clipboard that moves text, links, images, and files between your own devices. AES-256-GCM runs in the browser, so the server only ever holds ciphertext and thin metadata: no filenames, no MIME types, no plaintext. Next.js on Vercel handles auth, invites, and quotas; a Cloudflare Worker handles the realtime hub and R2 transfers, trusting only capability tokens the app mints. Sign-in is passkeys plus a 12-word recovery phrase, with no password fallback. Delivery goes peer-to-peer over WebRTC when a local path exists, otherwise through the hub."
+  github: "meownow"
+  preview: "https://meownow.vercel.app"
+
 - image: "bitchat-mirror.svg"
   title: "Bitchat Mirror"
   description: "🇮🇳 Unofficial mirror of the official bitchat-android APKs, created after Jack Dorsey published India's GitHub takedown notice targeting the Bitchat repositories on X. Continuously mirrors upstream releases, maintains a searchable release index, and serves APKs through a resilient static distribution pipeline powered by Cloudflare R2 and Vercel."
