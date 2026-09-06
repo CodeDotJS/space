@@ -8,14 +8,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const readoutCount = readout.querySelector('.contribution-readout-count');
     const NS = 'http://www.w3.org/2000/svg';
 
-    const W = 640;
-    const H = 420;
+    const W = 720;
+    const H = 520;
     const CX = W / 2;
-    const CY = H / 2 + 6;
-    const TURNS = 3.35;
+    const CY = H / 2 + 4;
+    const TURNS = 3.2;
     const THETA_MAX = TURNS * Math.PI * 2;
-    const R_INNER = 14;
-    const R_OUTER = Math.min(W, H) * 0.42;
+    const R_INNER = 22;
+    const R_OUTER = Math.min(W, H) * 0.44;
+
+    // Subtle spectrum — same recipe as the wakatime bars
+    const starColor = (index, total, level) => {
+        const hue = total <= 1 ? 0 : (index / (total - 1)) * 360;
+        const light = [78, 66, 60, 54, 48][level] ?? 60;
+        const alpha = [0.28, 0.55, 0.72, 0.88, 1][level] ?? 0.7;
+        return `hsla(${hue}, 20%, ${light}%, ${alpha})`;
+    };
 
     const formatDate = (iso) => {
         const date = new Date(iso + 'T00:00:00');
@@ -35,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const dayPoint = (index, total) => {
         const t = total <= 1 ? 0 : (index / (total - 1)) * THETA_MAX;
         const r = R_INNER + (R_OUTER - R_INNER) * (t / THETA_MAX);
-        // Start at top; wind clockwise through the year
         const angle = t - Math.PI / 2;
         return {
             x: CX + r * Math.cos(angle),
@@ -54,18 +61,35 @@ document.addEventListener('DOMContentLoaded', function () {
         return node;
     };
 
+    // Approximate civil markers for the chart year
+    const skyEvents = (year) => ([
+        { date: `${year}-03-20`, label: 'equinox', kind: 'equinox' },
+        { date: `${year}-06-21`, label: 'solstice', kind: 'solstice' },
+        { date: `${year}-09-22`, label: 'equinox', kind: 'equinox' },
+        { date: `${year}-12-21`, label: 'solstice', kind: 'solstice' },
+    ]);
+
     const render = (payload) => {
         const days = payload.days || [];
         if (!days.length) return;
 
+        const daysInYear = ((payload.year % 4 === 0 && payload.year % 100 !== 0) || payload.year % 400 === 0)
+            ? 366
+            : 365;
         document.getElementById('contributionTotal').textContent = payload.total.toLocaleString();
-        document.getElementById('contributionActive').textContent = payload.active_days.toLocaleString();
+        document.getElementById('contributionActive').textContent =
+            `${payload.active_days}/${daysInYear}`;
         const bestEl = document.getElementById('contributionBest');
         if (payload.best) {
-            bestEl.textContent = String(payload.best.count);
-            bestEl.title = formatDate(payload.best.date);
+            const bestDate = new Date(payload.best.date + 'T00:00:00');
+            bestEl.textContent = bestDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+            });
+            bestEl.title = `${formatDate(payload.best.date)} · ${payload.best.count} contributions`;
         } else {
             bestEl.textContent = '—';
+            bestEl.removeAttribute('title');
         }
         document.getElementById('contributionYear').textContent = String(payload.year);
 
@@ -75,60 +99,106 @@ document.addEventListener('DOMContentLoaded', function () {
         const defs = el('defs');
         defs.innerHTML = `
             <filter id="contributionGlow" x="-80%" y="-80%" width="260%" height="260%">
-                <feGaussianBlur stdDeviation="1.4" result="blur"/>
+                <feGaussianBlur stdDeviation="1.05" result="blur"/>
                 <feMerge>
                     <feMergeNode in="blur"/>
                     <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
-            <radialGradient id="contributionCore" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#313396" stop-opacity="0.35"/>
-                <stop offset="100%" stop-color="#313396" stop-opacity="0"/>
-            </radialGradient>
         `;
         svg.appendChild(defs);
 
-        // Soft core — year nucleus
+        // Reference orbits — like guide rings on a sky chart
+        const rings = el('g', { class: 'contribution-orbits' });
+        [0.28, 0.55, 0.82].forEach((frac, i) => {
+            rings.appendChild(el('circle', {
+                cx: CX,
+                cy: CY,
+                r: R_INNER + (R_OUTER - R_INNER) * frac,
+                class: `contribution-orbit orbit-${i}`,
+            }));
+        });
+        svg.appendChild(rings);
+
+        // Radial index line at periapsis (year start, top)
+        svg.appendChild(el('line', {
+            x1: CX,
+            y1: CY - 8,
+            x2: CX,
+            y2: CY - R_OUTER - 8,
+            class: 'contribution-index',
+        }));
+
+        // Soft nucleus
         svg.appendChild(el('circle', {
             cx: CX,
             cy: CY,
-            r: 28,
-            fill: 'url(#contributionCore)',
+            r: 26,
             class: 'contribution-core-glow',
         }));
         const yearMark = el('text', {
             x: CX,
-            y: CY + 4,
+            y: CY + 5,
             class: 'contribution-core-label',
             'text-anchor': 'middle',
         });
         yearMark.textContent = String(payload.year).slice(2);
         svg.appendChild(yearMark);
 
+        const peri = el('text', {
+            x: CX,
+            y: CY + 40,
+            class: 'contribution-apsis-label',
+            'text-anchor': 'middle',
+        });
+        peri.textContent = 'periapsis';
+        svg.appendChild(peri);
+
         const points = days.map((day, index) => {
             const pos = dayPoint(index, days.length);
             return { ...day, ...pos, index };
         });
 
-        // Arm path — the year as one continuous orbit
+        // Dual arm: outer halo + main orbital track (more visible spiral)
+        const armHalo = el('path', { class: 'contribution-arm-halo' });
         const arm = el('path', { class: 'contribution-arm' });
         let armD = '';
         points.forEach((p, i) => {
             armD += `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)} `;
         });
+        armHalo.setAttribute('d', armD.trim());
         arm.setAttribute('d', armD.trim());
+        svg.appendChild(armHalo);
         svg.appendChild(arm);
 
-        // Burst filaments — connect nearby high-activity days into unique "work constellations"
+        // Semi-major axis: nucleus → today (apoapsis)
+        const tip = points[points.length - 1];
+        svg.appendChild(el('line', {
+            x1: CX,
+            y1: CY,
+            x2: tip.x,
+            y2: tip.y,
+            class: 'contribution-axis',
+        }));
+
+        const apo = el('text', {
+            x: tip.x + Math.cos(tip.angle) * 22,
+            y: tip.y + Math.sin(tip.angle) * 22,
+            class: 'contribution-apsis-label',
+            'text-anchor': 'middle',
+            'dominant-baseline': 'middle',
+        });
+        apo.textContent = 'apoapsis';
+        svg.appendChild(apo);
+
+        // Burst filaments between nearby high-activity days
         const hot = points.filter((p) => p.level >= 3);
         const filaments = el('g', { class: 'contribution-filaments' });
         hot.forEach((a, i) => {
             for (let j = i + 1; j < hot.length; j++) {
                 const b = hot[j];
                 if (b.index - a.index > 10) break;
-                const dx = a.x - b.x;
-                const dy = a.y - b.y;
-                const dist = Math.hypot(dx, dy);
+                const dist = Math.hypot(a.x - b.x, a.y - b.y);
                 if (dist > 54) continue;
                 filaments.appendChild(el('line', {
                     x1: a.x,
@@ -141,18 +211,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         svg.appendChild(filaments);
 
-        // Month labels along the arm
+        // Month labels
         let lastMonth = -1;
         points.forEach((p) => {
             const month = new Date(p.date + 'T00:00:00').getMonth();
             if (month === lastMonth) return;
             lastMonth = month;
-            const labelR = p.r + 14;
-            const lx = CX + labelR * Math.cos(p.angle);
-            const ly = CY + labelR * Math.sin(p.angle);
+            const labelR = p.r + 20;
             const text = el('text', {
-                x: lx,
-                y: ly,
+                x: CX + labelR * Math.cos(p.angle),
+                y: CY + labelR * Math.sin(p.angle),
                 class: 'contribution-month-label',
                 'text-anchor': 'middle',
                 'dominant-baseline': 'middle',
@@ -161,6 +229,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 .toLocaleDateString('en-GB', { month: 'short' });
             svg.appendChild(text);
         });
+
+        // Equinox / solstice markers on the arm
+        const byDate = new Map(points.map((p) => [p.date, p]));
+        const events = el('g', { class: 'contribution-events' });
+        skyEvents(payload.year).forEach((event) => {
+            const p = byDate.get(event.date);
+            if (!p) return;
+            const tick = el('circle', {
+                cx: p.x,
+                cy: p.y,
+                r: 3.8,
+                class: `contribution-sky ${event.kind}`,
+            });
+            events.appendChild(tick);
+            const labelR = p.r + 34;
+            const label = el('text', {
+                x: CX + labelR * Math.cos(p.angle),
+                y: CY + labelR * Math.sin(p.angle),
+                class: 'contribution-sky-label',
+                'text-anchor': 'middle',
+                'dominant-baseline': 'middle',
+            });
+            label.textContent = event.label;
+            events.appendChild(label);
+        });
+        svg.appendChild(events);
+
+        // Equation caption
+        const eq = el('text', {
+            x: W - 12,
+            y: H - 10,
+            class: 'contribution-equation',
+            'text-anchor': 'end',
+        });
+        eq.textContent = 'r = a + bθ';
+        svg.appendChild(eq);
 
         const stars = el('g', { class: 'contribution-stars' });
         const hitAreas = el('g', { class: 'contribution-hits' });
@@ -173,20 +277,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         points.forEach((day) => {
             const level = day.level || 0;
-            const radius = level === 0 ? 1.15 : 1.5 + level * 1.35;
+            const radius = level === 0 ? 1.25 : 1.55 + level * 1.25;
             const star = el('circle', {
                 cx: day.x,
                 cy: day.y,
                 r: radius,
+                fill: starColor(day.index, days.length, level),
                 class: `contribution-star level-${level}`,
             });
             star.style.setProperty('--delay', `${Math.round(day.index * 3.2)}ms`);
             if (day.index === points.length - 1) {
                 star.classList.add('is-today');
             }
+            if (level >= 3) {
+                star.setAttribute('filter', 'url(#contributionGlow)');
+            }
             stars.appendChild(star);
 
-            // Invisible larger hit target for easier hovering on the spiral
             const hit = el('circle', {
                 cx: day.x,
                 cy: day.y,
@@ -215,15 +322,17 @@ document.addEventListener('DOMContentLoaded', function () {
         svg.appendChild(stars);
         svg.appendChild(hitAreas);
 
-        // Animate arm draw length
         const armLength = arm.getTotalLength();
-        arm.style.strokeDasharray = String(armLength);
-        arm.style.strokeDashoffset = String(armLength);
+        [arm, armHalo].forEach((path) => {
+            path.style.strokeDasharray = String(armLength);
+            path.style.strokeDashoffset = String(armLength);
+        });
 
         setReadout('Trace the spiral', '', false);
         requestAnimationFrame(() => {
             svg.classList.add('is-drawn');
             arm.style.strokeDashoffset = '0';
+            armHalo.style.strokeDashoffset = '0';
         });
     };
 
