@@ -304,6 +304,218 @@
     }
   }
 
+  .contribution {
+    margin-top: 48px;
+
+    h3 {
+      font-family: "Open Sans";
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: inherit;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .contribution-panel {
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .contribution-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .contribution-stat {
+      text-align: center;
+      padding: 4px 2px 8px;
+    }
+
+    .contribution-stat-label {
+      display: block;
+      font-family: "Open Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(51, 51, 51, 0.55);
+      margin-bottom: 4px;
+    }
+
+    .contribution-stat-value {
+      font-family: "Cascadia Code", "Inconsolata", monospace;
+      font-size: 1.35em;
+      color: #272727;
+      letter-spacing: -0.02em;
+      border-bottom: 2.5px solid #313396;
+    }
+
+    #contributionBest {
+      border-bottom-color: #FF0F00;
+    }
+
+    .contribution-readout {
+      min-height: 1.6em;
+      margin: 4px 0 10px;
+      text-align: center;
+      font-family: "Labrada", serif;
+      color: rgba(51, 51, 51, 0.45);
+      transition: color 0.15s ease;
+
+      &.is-active {
+        color: #272727;
+      }
+    }
+
+    .contribution-readout-date {
+      font-family: "Cascadia Code", "Inconsolata", monospace;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+
+    .contribution-readout-count {
+      font-size: 15px;
+      border-bottom: 2.5px solid transparent;
+    }
+
+    .contribution-readout.is-active .contribution-readout-count {
+      border-bottom-color: #FF0F00;
+    }
+
+    .contribution-chart {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    #contributionSvg {
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .contribution-core-label {
+      font-family: "Cascadia Code", "Inconsolata", monospace;
+      font-size: 13px;
+      font-weight: 700;
+      fill: #313396;
+      letter-spacing: 0.04em;
+      opacity: 0.85;
+    }
+
+    .contribution-arm {
+      fill: none;
+      stroke: rgba(49, 51, 150, 0.22);
+      stroke-width: 1.1;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke-dashoffset 2.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .contribution-filament {
+      stroke: rgba(255, 15, 0, 0.22);
+      stroke-width: 0.9;
+      opacity: 0;
+      transition: opacity 0.8s ease 0.9s;
+    }
+
+    #contributionSvg.is-drawn .contribution-filament {
+      opacity: 1;
+    }
+
+    .contribution-month-label {
+      font-family: "Andika", sans-serif;
+      font-size: 9px;
+      fill: rgba(51, 51, 51, 0.48);
+      pointer-events: none;
+    }
+
+    .contribution-star {
+      opacity: 0;
+      transition: opacity 0.4s ease, fill 0.15s ease, stroke 0.15s ease;
+      transition-delay: var(--delay, 0ms);
+      pointer-events: none;
+    }
+
+    #contributionSvg.is-drawn .contribution-star {
+      opacity: 1;
+    }
+
+    .contribution-hit {
+      fill: transparent;
+      cursor: crosshair;
+    }
+
+    .contribution-star.level-0 {
+      fill: rgba(39, 39, 39, 0.12);
+    }
+
+    .contribution-star.level-1 {
+      fill: #9a9cd4;
+    }
+
+    .contribution-star.level-2 {
+      fill: #313396;
+    }
+
+    .contribution-star.level-3 {
+      fill: #1f217a;
+      filter: url(#contributionGlow);
+    }
+
+    .contribution-star.level-4 {
+      fill: #FF0F00;
+      filter: url(#contributionGlow);
+    }
+
+    .contribution-star.is-today {
+      stroke: #FF0F00;
+      stroke-width: 1.4;
+    }
+
+    .contribution-star.is-near {
+      fill: #7a7cc9;
+    }
+
+    .contribution-star.is-hot {
+      fill: #ffffdd;
+      stroke: #FF0F00;
+      stroke-width: 1.6;
+      filter: url(#contributionGlow);
+    }
+
+    .contribution-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-family: "Andika", sans-serif;
+      font-size: 11px;
+      color: rgba(51, 51, 51, 0.55);
+    }
+
+    .contribution-footer-mid {
+      font-family: "Open Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #272727;
+      opacity: 0.55;
+    }
+  }
+
   .pocket {
      .content-item {
         margin-top: 10px;
