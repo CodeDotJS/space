@@ -1,3 +1,9 @@
+- image: "detro.svg"
+  title: "DETRO - Delhi Metro Simple"
+  description: "A free, ad-free Delhi Metro planner, with no account and no official DMRC tie. Pick two stations and get one route: the train, where to change, the platform, and the fare. The snapshot was pulled from the Delhi Metro site on 30 September 2026: 254 stations, and a saved journey for all 64,262 ordered pairs between them. After one online load, search, maps, and fares still work with the signal cut. Trips stay on the device. A shared link carries station codes, not a location. React, Vite, and Cloudflare Pages. It does not claim live arrivals."
+  github: "detro"
+  preview: "https://detro.pages.dev"
+
 - image: "meownow.svg"
   title: "meownow"
   description: "An invite-only, end-to-end encrypted clipboard that moves text, links, images, and files between your own devices. AES-256-GCM runs in the browser, so the server only ever holds ciphertext and thin metadata: no filenames, no MIME types, no plaintext. Next.js on Vercel handles auth, invites, and quotas; a Cloudflare Worker handles the realtime hub and R2 transfers, trusting only capability tokens the app mints. Sign-in is passkeys plus a 12-word recovery phrase, with no password fallback. Delivery goes peer-to-peer over WebRTC when a local path exists, otherwise through the hub."
